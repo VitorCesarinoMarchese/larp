@@ -44,6 +44,7 @@ int main() {
     CHECK(r.stats.invalid == 2);
     conflict.timestamp_us = 77;
     conflict.packet_count = 3;
+    conflict.payload_size = payload_capacity;
     encode(conflict, wire);
     CHECK(!r.accept(wire, 300002));
     CHECK(r.stats.invalid == 3);
@@ -55,6 +56,22 @@ int main() {
     r.expire(500000);
     CHECK(r.stats.dropped == 4);
     CHECK(!packet(7, 1, 500001));
+    Reassembler maximum;
+    for (std::uint32_t index = max_packets; index > 0; --index) {
+        const auto offset = (index - 1) * payload_capacity;
+        const auto length = std::min(payload_capacity, max_frame_size - offset);
+        encode(Header{1, index - 1, max_packets, 1, length}, wire);
+        for (std::size_t i = 0; i < length; ++i)
+            wire[header_size + i] = synthetic_byte(1, offset + i);
+        auto result = maximum.accept(std::span(wire).first(header_size + length), 0);
+        if (index == 1) {
+            CHECK(result && result->size() == max_frame_size);
+            for (std::size_t i = 0; i < result->size(); ++i)
+                CHECK((*result)[i] == synthetic_byte(1, i));
+        } else {
+            CHECK(!result);
+        }
+    }
     for (std::uint64_t id = 8; id < 10008; ++id) {
         CHECK(!packet(id, 1, id * 100000));
         CHECK(packet(id, 0, id * 100000 + 1));
