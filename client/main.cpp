@@ -6,16 +6,17 @@
 #include <iostream>
 int main(int argc, char **argv) {
     try {
-        if (argc != 4) {
-            std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS\n";
+        if (argc != 4 && argc != 5) {
+            std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS [FRAME_TIMEOUT_MS]\n";
             return 1;
         }
         using namespace larp;
         const auto local =
             Endpoint::parse(argv[1], static_cast<std::uint16_t>(number(argv[2], 0, 65535)));
         const auto seconds = number(argv[3], 1, 86400);
+        const auto timeout_ms = argc == 5 ? number(argv[4], 1, 1000) : 100;
         UdpSocket socket(local);
-        Reassembler reassembly;
+        Reassembler reassembly{std::chrono::milliseconds(timeout_ms)};
         std::optional<Endpoint> peer;
         std::array<std::byte, datagram_size> wire{};
         std::uint64_t packets = 0, bytes = 0, valid = 0, corrupt = 0, foreign = 0;
@@ -27,12 +28,20 @@ int main(int argc, char **argv) {
             const auto &s = reassembly.stats;
             std::cout << std::fixed << std::setprecision(2)
                       << "FPS: " << static_cast<double>(valid - previous_valid) / elapsed
-                      << " Packets: " << packets << " Packet loss: "
-                      << (s.expected ? 100.0 * static_cast<double>(s.missing) /
-                                           static_cast<double>(s.expected)
-                                     : 0.0)
-                      << "% Dropped: " << s.dropped << " frames Missing: " << s.missing
-                      << " Skipped: " << s.skipped << " RTT: N/A Throughput: "
+                      << " Packets: " << packets;
+            auto percentage = [](const char *label, std::optional<double> value) {
+                std::cout << label;
+                if (value)
+                    std::cout << *value << '%';
+                else
+                    std::cout << "N/A";
+            };
+            percentage(" Observed packet loss: ", s.packet_loss_percent());
+            percentage(" Frame loss: ", s.frame_loss_percent());
+            std::cout << " Dropped: " << s.dropped << " frames Missing: " << s.missing
+                      << " Expired: " << s.expired << " Superseded: " << s.superseded
+                      << " Shutdown: " << s.shutdown << " Skipped: " << s.skipped
+                      << " RTT: N/A Throughput: "
                       << static_cast<double>(bytes - previous_bytes) * 8.0 / elapsed / 1000000.0
                       << " Mbps Validated: " << valid << " Corrupt: " << corrupt
                       << " Invalid: " << s.invalid << " Duplicates: " << s.duplicates
@@ -44,7 +53,7 @@ int main(int argc, char **argv) {
         };
         std::cout << "Listening: " << socket.local_endpoint().port << std::endl;
         while (now_us() - start < std::uint64_t(seconds) * 1000000) {
-            const auto received = socket.receive(wire, 10);
+            const auto received = socket.receive(wire, static_cast<int>(std::min(timeout_ms, 10U)));
             const auto now = now_us();
             reassembly.expire(now);
             if (received.status != ReceiveStatus::timeout) {
