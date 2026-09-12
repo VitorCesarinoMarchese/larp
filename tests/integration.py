@@ -35,8 +35,10 @@ def packet(frame, index, count=2, corrupt=False):
 for data in [b'bad', b'x' * 1201, packet(1, 1), packet(1, 1), packet(1, 0),
              packet(2, 0), packet(3, 1), packet(3, 0, corrupt=True), packet(4, 0)]:
     sender.sendto(data, ('127.0.0.1', port))
+foreign = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+foreign.sendto(packet(999, 0), ('127.0.0.1', port))
 out = finish(process)
-for expected in ['Validated: 1 ', 'Corrupt: 1 ', 'Dropped: 2 ', 'Missing: 2 ', 'Invalid: 2 ', 'Duplicates: 1 ']:
+for expected in ['Validated: 1 ', 'Corrupt: 1 ', 'Dropped: 2 ', 'Missing: 2 ', 'Invalid: 2 ', 'Duplicates: 1 ', 'Foreign: 1 ']:
     assert expected in out, (expected, out)
 for executable, args in [('larp-host', ['127.0.0.1', '9999', '1', '0', '60']),
                          ('larp-client', ['127.0.0.1', '9999', '-1'])]:

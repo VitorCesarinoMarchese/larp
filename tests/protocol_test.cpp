@@ -23,5 +23,14 @@ int main() {
     CHECK(!decode(std::span(wire).first(header_size + 1)));
     h.packet_index = 1; encode(h, wire);
     CHECK(decode(std::span(wire).first(header_size + 1)));
+    h.packet_count=max_packets; h.packet_index=max_packets-1;
+    h.payload_size=max_frame_size-(max_packets-1)*payload_capacity;
+    encode(h,wire); CHECK(decode(std::span(wire).first(header_size+h.payload_size)));
+    ++h.payload_size; encode(h,wire); CHECK(!decode(std::span(wire).first(header_size+h.payload_size)));
+    std::uint32_t random=17;
+    for(int iteration=0;iteration<10000;++iteration) {
+        for(auto& byte:wire) { random=random*1664525U+1013904223U; byte=std::byte(random>>24); }
+        (void)decode(std::span(wire).first(random%(datagram_size+1)));
+    }
     std::cout << "protocol checks passed\n";
 }
