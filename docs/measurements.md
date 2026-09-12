@@ -36,3 +36,13 @@ Receiver RSS remained at 8,392 KiB across 309 samples taken every 100 ms after a
 Raw receiver reports are preserved in [the 10-second log](../benchmarks/results/lan-10s.log) and [the synchronized 30-second log](../benchmarks/results/lan-30s.log). Both runs used 16,384-byte frames at 60 FPS. The synchronized run used an ephemeral client port and a 33-second client lifetime. The remote shell waited for the client port on standard input before starting the host.
 
 The two-machine transport check passed with observable whole-frame loss. It does not establish the cause of that loss, reverse-direction connectivity, saturation throughput, or end-to-end latency. No transport implementation changes or optimizations were made for this test.
+
+## Reverse-direction follow-up
+
+At the follow-up check, the development machine routed `192.168.1.30` through `192.168.0.1` on `enp8s0`, rather than through Proton VPN. No network configuration changes were made by the test. Ping still received no replies.
+
+The remote client bound `192.168.1.30` and reported readiness before the local host started. The host sent 1,800 frames and 27,000 packets over 30 seconds. The remote client received zero packets during its 33-second lifetime. Successful UDP sends do not establish delivery. The cause of this directional connectivity failure remains undiagnosed.
+
+The [reverse LAN log](../benchmarks/results/lan-reverse-30s.log) preserves the receiver output. This run does not change the successful forward LAN result.
+
+The reverse transfer over Tailscale succeeded. The remote client bound `100.118.75.118`, and the local host sent 600 frames and 9,000 packets over 10 seconds. All 600 frames validated, with zero missing packets, skipped frames, or corruption. The [reverse Tailscale log](../benchmarks/results/tailscale-reverse-10s.log) preserves the result. This verifies the remote receiver on the overlay path; it does not prove reverse physical LAN connectivity or identify which network setting blocks that path.
