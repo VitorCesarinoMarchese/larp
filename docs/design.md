@@ -12,6 +12,6 @@ Datagrams contain at most 1,200 bytes of UDP payload. Linux path MTU discovery f
 
 The host sends each frame as a burst and uses a steady-clock deadline for the next frame. If it falls behind, it does not queue missed deadlines. Large frames can overrun the bounded receive socket buffer, especially on slower machines or links. Packet pacing is a candidate for a measured follow-up, not a claim of this milestone.
 
-The 100 ms timeout uses local receipt time. Comparing remote monotonic timestamps would produce invalid latency measurements. The timeout bounds how long an incomplete frame remains useful, but it cannot distinguish a delayed packet already queued in the network from a fresh packet.
+The timeout defaults to 100 ms and uses local receipt time. The client allows 1 through 1,000 ms. Shorter timeouts discard delayed frames sooner but can drop usable frames on a jittery path. Comparing remote monotonic timestamps would produce invalid latency measurements. The timeout bounds how long an incomplete frame remains useful, but it cannot distinguish a delayed packet already queued in the network from a fresh packet.
 
 `capture`, `codec`, and `render` reserve the requested directory structure. They have no interfaces or dependencies yet. PipeWire, FFmpeg, hardware acceleration, rendering, control messages, adaptive streaming, and Windows implementations remain outside this milestone.
