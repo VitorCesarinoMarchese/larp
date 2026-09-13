@@ -2,9 +2,26 @@
 
 Low-latency Adaptive Remote Protocol. Milestones 1 through 3 transport synthetic frames and PipeWire screen previews over UDP on Linux, validate their contents, and report loss and stale-frame drops.
 
+## Milestone status
+
+- [x] Milestone 1: synthetic frame transport over UDP
+- [x] Milestone 2: packet loss and stale-frame handling
+- [x] Milestone 3: Linux PipeWire screen capture
+- [ ] Milestone 4: H.264 software encoding and decoding
+- [ ] Milestone 5: NVENC and NVDEC acceleration
+- [ ] Milestone 6: low-latency Linux rendering
+- [ ] Milestone 7: network telemetry and adaptive bitrate
+- [ ] Milestone 8: Windows capture abstraction
+- [ ] Milestone 9: Windows hardware encoding and decoding
+- [ ] Milestone 10: Windows rendering and Winsock transport
+- [ ] Milestone 11: Linux and Windows interoperability
+- [ ] Milestone 12: internet transport, NAT traversal, and broader networking work
+
+Each completed milestone has implementation notes and measurements in [`docs/`](docs/). Development stops for review at the end of each milestone.
+
 ## Build and test
 
-Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration test and RSS benchmark. No media libraries are needed yet.
+Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration test and RSS benchmark. Capture-enabled builds require the PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` to build only the transport and receiver.
 
 ```sh
 cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
