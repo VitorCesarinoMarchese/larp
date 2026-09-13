@@ -1,20 +1,27 @@
 #include "common/runtime.hpp"
+#include "media/raw_frame.hpp"
 #include "platform/udp.hpp"
 #include "transport/reassembly.hpp"
 #include <array>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 int main(int argc, char **argv) {
     try {
-        if (argc != 4 && argc != 5) {
-            std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS [FRAME_TIMEOUT_MS]\n";
+        const bool raw_mode = argc > 1 && std::string_view(argv[1]) == "--raw";
+        if ((!raw_mode && argc != 4 && argc != 5) || (raw_mode && argc != 6 && argc != 7)) {
+            std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS [FRAME_TIMEOUT_MS]\n"
+                         "       larp-client --raw BIND_IPv4 PORT SECONDS OUTPUT.ppm "
+                         "[FRAME_TIMEOUT_MS]\n";
             return 1;
         }
         using namespace larp;
-        const auto local =
-            Endpoint::parse(argv[1], static_cast<std::uint16_t>(number(argv[2], 0, 65535)));
-        const auto seconds = number(argv[3], 1, 86400);
-        const auto timeout_ms = argc == 5 ? number(argv[4], 1, 1000) : 100;
+        const int offset = raw_mode ? 1 : 0;
+        const auto local = Endpoint::parse(
+            argv[1 + offset], static_cast<std::uint16_t>(number(argv[2 + offset], 0, 65535)));
+        const auto seconds = number(argv[3 + offset], 1, 86400);
+        const auto timeout_ms =
+            argc == (raw_mode ? 7 : 5) ? number(argv[raw_mode ? 6 : 4], 1, 1000) : 100;
         UdpSocket socket(local);
         Reassembler reassembly{std::chrono::milliseconds(timeout_ms)};
         std::optional<Endpoint> peer;
@@ -72,11 +79,29 @@ int main(int argc, char **argv) {
                         const auto frame = reassembly.accept(packet, now);
                         if (frame) {
                             bool correct = true;
-                            for (std::size_t i = 0; i < frame->size(); ++i)
-                                if ((*frame)[i] != synthetic_byte(header->frame_id, i)) {
-                                    correct = false;
-                                    break;
+                            if (raw_mode) {
+                                const auto raw = read_raw_frame(*frame);
+                                correct = raw.has_value();
+                                if (raw && valid == 0) {
+                                    std::ofstream image(argv[5],
+                                                        std::ios::binary | std::ios::trunc);
+                                    image << "P6\n"
+                                          << raw->width << ' ' << raw->height << "\n255\n";
+                                    image.write(reinterpret_cast<const char *>(raw->pixels.data()),
+                                                static_cast<std::streamsize>(raw->pixels.size()));
+                                    image.close();
+                                    if (!image)
+                                        throw std::runtime_error("cannot write capture snapshot");
+                                    std::cout << "Snapshot: " << raw->width << 'x' << raw->height
+                                              << '\n';
                                 }
+                            } else {
+                                for (std::size_t i = 0; i < frame->size(); ++i)
+                                    if ((*frame)[i] != synthetic_byte(header->frame_id, i)) {
+                                        correct = false;
+                                        break;
+                                    }
+                            }
                             if (correct)
                                 ++valid;
                             else

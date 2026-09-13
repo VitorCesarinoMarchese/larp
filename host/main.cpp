@@ -1,4 +1,7 @@
 #include "common/runtime.hpp"
+#ifdef LARP_CAPTURE
+#include "host/capture_main.hpp"
+#endif
 #include "platform/udp.hpp"
 #include "protocol/packet.hpp"
 #include <algorithm>
@@ -8,6 +11,13 @@
 #include <vector>
 int main(int argc, char **argv) {
     try {
+        if (argc > 1 && std::string_view(argv[1]) == "--capture") {
+#ifdef LARP_CAPTURE
+            return capture_main(argc, argv);
+#else
+            throw std::runtime_error("PipeWire capture was disabled at build time");
+#endif
+        }
         if (argc != 6) {
             std::cerr << "Usage: larp-host IPv4 PORT FRAMES BYTES FPS\n";
             return 1;
