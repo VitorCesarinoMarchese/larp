@@ -1,6 +1,6 @@
 # L.A.R.P.
 
-Low-latency Adaptive Remote Protocol. Milestones 1 and 2 transport synthetic frames over UDP on Linux, validate their contents, and report loss and stale-frame drops.
+Low-latency Adaptive Remote Protocol. Milestones 1 through 3 transport synthetic frames and PipeWire screen previews over UDP on Linux, validate their contents, and report loss and stale-frame drops.
 
 ## Build and test
 
@@ -68,3 +68,7 @@ python3 tests/tailscale_impairment.py notept /tmp/larp-m2.JcrIW0/build 100.118.7
 The check sends reordered and duplicate packets, omits a packet and a whole frame, waits for expiry, and then sends a late packet followed by a usable frame. It expects three validated frames, one expiry, one replacement, one skipped frame, 20% observed packet loss, and 50% frame loss. Additional network loss can fail this acceptance check. Unit tests verify exact deadlines without wall-clock sleeps.
 
 Observed packet loss excludes entirely unseen frames because their packet counts are unknown. Read Frame loss and Skipped alongside it. See [milestone-two evidence](docs/milestone-two.md) for the tests and memory measurements.
+
+## PipeWire screen capture
+
+The milestone-three capture and raw-preview commands are described in [the capture guide](docs/capture.md). Capture-enabled builds now require PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` for a transport-only build. Live capture and Tailscale preview delivery are verified; the guide records the tests, the leak fix, and memory measurements.

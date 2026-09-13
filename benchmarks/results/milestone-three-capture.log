@@ -1,0 +1,31 @@
+Capture host, ASAN_OPTIONS=detect_leaks=1
+Select a screen in the desktop portal.
+Preview: 320x180
+Captured: 100 Packets: 14900 Superseded: 0 Malformed: 0 Timeouts: 0
+Sanitizer stderr: empty
+Host sanitized RSS KiB min=68396 max=68400 first=68396 last=68400 samples=90
+
+Remote receiver, active intervals and final report
+Snapshot: 320x180
+FPS: 2.97 Packets: 447 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 4.22 Mbps Validated: 3 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.00 Packets: 1179 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.99 Mbps Validated: 7 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 5.00 Packets: 1920 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.07 Mbps Validated: 12 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 5.98 Packets: 2682 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.25 Mbps Validated: 18 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 3.99 Packets: 3394 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.79 Mbps Validated: 22 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 5.95 Packets: 4172 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.37 Mbps Validated: 28 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.97 Packets: 4917 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.07 Mbps Validated: 33 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.98 Packets: 5662 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.08 Mbps Validated: 38 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.99 Packets: 6407 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.10 Mbps Validated: 43 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.97 Packets: 7152 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.07 Mbps Validated: 48 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.99 Packets: 7897 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.11 Mbps Validated: 53 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.97 Packets: 8642 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.07 Mbps Validated: 58 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.95 Packets: 9387 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.04 Mbps Validated: 63 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 5.00 Packets: 10132 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.11 Mbps Validated: 68 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.98 Packets: 10877 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.08 Mbps Validated: 73 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.97 Packets: 11622 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.08 Mbps Validated: 78 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.98 Packets: 12367 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.09 Mbps Validated: 83 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 5.00 Packets: 13112 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.11 Mbps Validated: 88 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 5.00 Packets: 13857 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.11 Mbps Validated: 93 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 4.98 Packets: 14602 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 7.09 Mbps Validated: 98 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 1.99 Packets: 14900 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 2.83 Mbps Validated: 100 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
+FPS: 0.00 Packets: 14900 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 100 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 
