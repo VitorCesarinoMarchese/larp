@@ -1,4 +1,5 @@
 #include "capture/capture.hpp"
+#include "capture/linux/context.hpp"
 #include "capture/linux/portal.hpp"
 #include "common/runtime.hpp"
 #include <array>
@@ -21,11 +22,6 @@ struct PwRuntime {
 struct LoopDelete {
     void operator()(pw_main_loop *p) const {
         pw_main_loop_destroy(p);
-    }
-};
-struct ContextDelete {
-    void operator()(pw_context *p) const {
-        pw_context_destroy(p);
     }
 };
 struct CoreDelete {
@@ -193,7 +189,7 @@ class PipeWireCapture final : public ScreenCapture {
     PipeWireCapture() {
         if (!loop_)
             throw std::runtime_error("cannot create PipeWire loop");
-        context_.reset(pw_context_new(pw_main_loop_get_loop(loop_.get()), nullptr, 0));
+        context_ = open_capture_context(pw_main_loop_get_loop(loop_.get()));
         if (!context_)
             throw std::runtime_error("cannot create PipeWire context");
         core_.reset(pw_context_connect_fd(context_.get(), portal_.open_remote(), nullptr, 0));
