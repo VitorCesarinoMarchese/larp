@@ -1,13 +1,13 @@
 # L.A.R.P.
 
-Low-latency Adaptive Remote Protocol. Milestones 1 through 3 transport synthetic frames and PipeWire screen previews over UDP on Linux, validate their contents, and report loss and stale-frame drops.
+Low-latency Adaptive Remote Protocol. Milestones 1 through 4 transport synthetic frames and PipeWire screen previews over UDP on Linux, encode and decode H.264 in software, and report loss and stale-frame drops.
 
 ## Milestone status
 
 - [x] Milestone 1: synthetic frame transport over UDP
 - [x] Milestone 2: packet loss and stale-frame handling
 - [x] Milestone 3: Linux PipeWire screen capture
-- [ ] Milestone 4: H.264 software encoding and decoding
+- [x] Milestone 4: H.264 software encoding and decoding
 - [ ] Milestone 5: NVENC and NVDEC acceleration
 - [ ] Milestone 6: low-latency Linux rendering
 - [ ] Milestone 7: network telemetry and adaptive bitrate
@@ -21,7 +21,7 @@ Each completed milestone has implementation notes and measurements in [`docs/`](
 
 ## Build and test
 
-Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration test and RSS benchmark. Capture-enabled builds require the PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` to build only the transport and receiver.
+Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration tests and RSS benchmarks. All builds require the FFmpeg `libavcodec`, `libavutil`, and `libswscale` development libraries. Software encoding requires FFmpeg with `libx264`. Capture-enabled builds also require the PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` to build the transport, software codec, and receiver without desktop capture.
 
 ```sh
 cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
@@ -88,4 +88,8 @@ Observed packet loss excludes entirely unseen frames because their packet counts
 
 ## PipeWire screen capture
 
-The milestone-three capture and raw-preview commands are described in [the capture guide](docs/capture.md). Capture-enabled builds now require PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` for a transport-only build. Live capture and Tailscale preview delivery are verified; the guide records the tests, the leak fix, and memory measurements.
+The milestone-three capture and raw-preview commands are described in [the capture guide](docs/capture.md). Use `-DLARP_CAPTURE=OFF` to omit desktop capture. Live capture and Tailscale preview delivery are verified; the guide records the tests, the leak fix, and memory measurements.
+
+## Software H.264 preview
+
+The `--h264` host and client modes encode and decode screen previews with FFmpeg. The client saves a decoded snapshot and reports processing times. See [the software H.264 guide](docs/software-h264.md) for commands, memory limits, recovery behavior, and verified Tailscale results.
