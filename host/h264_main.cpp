@@ -1,5 +1,6 @@
 #include "host/h264_main.hpp"
 #include "codec/h264.hpp"
+#include "codec/options.hpp"
 #include "common/runtime.hpp"
 #include "transport/send_frame.hpp"
 #include <iostream>
@@ -7,13 +8,16 @@
 #include <vector>
 int h264_synthetic_main(int argc, char **argv) {
     using namespace larp;
+    const auto backend = take_codec_option(argc, argv);
     if (argc != 6)
-        throw std::invalid_argument("Usage: larp-host --h264-synthetic IPv4 PORT FRAMES FPS");
+        throw std::invalid_argument(
+            "Usage: larp-host --h264-synthetic IPv4 PORT FRAMES FPS [--codec software|nvidia]");
     const auto destination =
         Endpoint::parse(argv[2], static_cast<std::uint16_t>(number(argv[3], 1, 65535)));
     const auto frames = number(argv[4], 1, 1000000000), fps = number(argv[5], 1, 30);
     UdpSocket socket(Endpoint::parse("0.0.0.0", 0));
-    H264Encoder encoder(320, 180, fps);
+    H264Encoder encoder(320, 180, fps, backend);
+    std::cout << "Encoder: " << encoder.name() << '\n' << std::flush;
     std::vector<std::byte> rgb(320 * 180 * 3), encoded(h264_capacity);
     const auto period = std::chrono::nanoseconds(1000000000 / fps);
     auto deadline = Clock::now();

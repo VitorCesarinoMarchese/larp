@@ -1,4 +1,5 @@
 #include "codec/h264.hpp"
+#include "codec/options.hpp"
 #include "common/runtime.hpp"
 #include "media/raw_frame.hpp"
 #include "platform/udp.hpp"
@@ -11,11 +12,13 @@
 int main(int argc, char **argv) {
     try {
         const bool h264_mode = argc > 1 && std::string_view(argv[1]) == "--h264";
+        const auto backend =
+            h264_mode ? larp::take_codec_option(argc, argv) : larp::CodecBackend::software;
         const bool raw_mode = h264_mode || (argc > 1 && std::string_view(argv[1]) == "--raw");
         if ((!raw_mode && argc != 4 && argc != 5) || (raw_mode && argc != 6 && argc != 7)) {
             std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS [FRAME_TIMEOUT_MS]\n"
                          "       larp-client --raw|--h264 BIND_IPv4 PORT SECONDS OUTPUT.ppm "
-                         "[FRAME_TIMEOUT_MS]\n";
+                         "[FRAME_TIMEOUT_MS] [--codec software|nvidia]\n";
             return 1;
         }
         using namespace larp;
@@ -27,7 +30,7 @@ int main(int argc, char **argv) {
             argc == (raw_mode ? 7 : 5) ? number(argv[raw_mode ? 6 : 4], 1, 1000) : 100;
         UdpSocket socket(local);
         Reassembler reassembly{std::chrono::milliseconds(timeout_ms)};
-        auto decoder = h264_mode ? std::make_unique<H264Decoder>() : nullptr;
+        auto decoder = h264_mode ? std::make_unique<H264Decoder>(backend) : nullptr;
         std::vector<std::byte> decoded(h264_mode ? 320 * 180 * 3 : 0);
         std::uint64_t decode_us = 0, decode_attempts = 0;
         std::optional<Endpoint> peer;
@@ -67,6 +70,8 @@ int main(int argc, char **argv) {
             previous_bytes = bytes;
         };
         std::cout << "Listening: " << socket.local_endpoint().port << std::endl;
+        if (decoder)
+            std::cout << "Decoder: " << decoder->name() << '\n' << std::flush;
         while (now_us() - start < std::uint64_t(seconds) * 1000000) {
             const auto received = socket.receive(wire, static_cast<int>(std::min(timeout_ms, 10U)));
             const auto now = now_us();

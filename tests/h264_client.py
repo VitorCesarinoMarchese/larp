@@ -4,17 +4,19 @@ import sys
 import tempfile
 
 build = pathlib.Path(sys.argv[1]).resolve()
+encoder = sys.argv[2] if len(sys.argv) > 2 else 'software'
+decoder = sys.argv[3] if len(sys.argv) > 3 else 'software'
 with tempfile.TemporaryDirectory() as temporary:
     path = pathlib.Path(temporary) / 'decoded.ppm'
     client = subprocess.Popen(
-        [str(build / 'larp-client'), '--h264', '127.0.0.1', '0', '2', str(path)],
+        [str(build / 'larp-client'), '--h264', '127.0.0.1', '0', '3', str(path), '--codec', decoder],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     try:
         line = client.stdout.readline()
         assert line.startswith('Listening: '), (line, client.communicate())
         host = subprocess.run(
             [str(build / 'larp-host'), '--h264-synthetic', '127.0.0.1',
-             line.split()[-1], '10', '10'], capture_output=True, text=True, timeout=5)
+             line.split()[-1], '10', '10', '--codec', encoder], capture_output=True, text=True, timeout=5)
         assert host.returncode == 0, (host.stdout, host.stderr)
         out, err = client.communicate(timeout=5)
         assert client.returncode == 0, (out, err)

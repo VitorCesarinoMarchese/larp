@@ -8,13 +8,15 @@ import tempfile
 import zlib
 
 build = pathlib.Path(sys.argv[1]).resolve()
+encoder = sys.argv[3] if len(sys.argv) > 3 else 'software'
+decoder = sys.argv[4] if len(sys.argv) > 4 else 'software'
 header = struct.Struct('!IHQIIQI')
 frames = {}
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sink:
     sink.bind(('127.0.0.1', 0))
     sink.settimeout(5)
     host = subprocess.Popen([str(build / 'larp-host'), '--h264-synthetic', '127.0.0.1',
-                             str(sink.getsockname()[1]), '3', '10'],
+                             str(sink.getsockname()[1]), '3', '10', '--codec', encoder],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
         while len(frames) < 3 or any(len(parts) != count for count, parts in frames.values()):
@@ -31,16 +33,23 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sink:
 first = b''.join(frames[1][1][i] for i in range(frames[1][0]))
 assert struct.unpack('!IHHII', first[:16]) == (0x4c483236, 1, 1, 320, 180)
 assert zlib.crc32(first[:16] + first[20:]) == struct.unpack('!I', first[16:20])[0]
-if len(sys.argv) > 2:
+unsupported = None
+if len(sys.argv) > 2 and sys.argv[2] != '-':
     independent = subprocess.run([sys.argv[2], '-v', 'error', '-f', 'h264', '-i', 'pipe:0',
                                   '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', 'pipe:1'],
                                  input=first[20:], capture_output=True, timeout=5, check=True)
     assert len(independent.stdout) == 320 * 180 * 3
     assert max(abs(value - 90) for value in independent.stdout) <= 4
+    other_profile = subprocess.run(
+        [sys.argv[2], '-v', 'error', '-f', 'lavfi', '-i', 'color=gray:size=320x180',
+         '-frames:v', '1', '-pix_fmt', 'yuv444p', '-c:v', 'libx264', '-g', '1', '-bf', '0',
+         '-f', 'h264', 'pipe:1'], capture_output=True, timeout=5, check=True).stdout
+    prefix = struct.pack('!IHHII', 0x4c483236, 1, 1, 320, 180)
+    unsupported = prefix + struct.pack('!I', zlib.crc32(prefix + other_profile)) + other_profile
 
 with tempfile.TemporaryDirectory() as temporary:
     client = subprocess.Popen([str(build / 'larp-client'), '--h264', '127.0.0.1', '0', '2',
-                               str(pathlib.Path(temporary) / 'decoded.ppm')],
+                               str(pathlib.Path(temporary) / 'decoded.ppm'), '--codec', decoder],
                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     try:
         line = client.stdout.readline()
@@ -59,9 +68,16 @@ with tempfile.TemporaryDirectory() as temporary:
                         body = body[:-1] + bytes([body[-1] ^ 1])
                     sender.sendto(header.pack(0x4c415250, 1, frame, index, count, 0, len(body)) + body,
                                   destination)
+            if unsupported is not None:
+                for frame, data in [(6, unsupported), (7, first)]:
+                    count = (len(data) + 1165) // 1166
+                    for index in range(count):
+                        body = data[index * 1166:(index + 1) * 1166]
+                        sender.sendto(header.pack(0x4c415250, 1, frame, index, count, 0, len(body)) + body,
+                                      destination)
         out, err = client.communicate(timeout=5)
         assert client.returncode == 0, (out, err)
-        assert 'Validated: 3 ' in out and 'Corrupt: 1 ' in out, out
+        assert f'Validated: {4 if unsupported else 3} ' in out and f'Corrupt: {2 if unsupported else 1} ' in out, out
         assert 'Dropped: 1 frames Missing: 1 ' in out, out
     finally:
         if client.poll() is None:

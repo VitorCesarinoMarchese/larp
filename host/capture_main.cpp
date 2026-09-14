@@ -1,6 +1,7 @@
 #include "host/capture_main.hpp"
 #include "capture/capture.hpp"
 #include "codec/h264.hpp"
+#include "codec/options.hpp"
 #include "common/runtime.hpp"
 #include "media/raw_frame.hpp"
 #include "platform/udp.hpp"
@@ -12,8 +13,11 @@
 #include <vector>
 int capture_main(int argc, char **argv) {
     using namespace larp;
+    const bool h264 = argc > 1 && std::string_view(argv[1]) == "--h264";
+    const auto backend = h264 ? take_codec_option(argc, argv) : CodecBackend::software;
     if (argc != 6) {
-        std::cerr << "Usage: larp-host --capture|--h264 IPv4 PORT SECONDS FPS\n";
+        std::cerr << "Usage: larp-host --capture|--h264 IPv4 PORT SECONDS FPS [--codec "
+                     "software|nvidia]\n";
         return 1;
     }
     const auto destination =
@@ -21,7 +25,6 @@ int capture_main(int argc, char **argv) {
     const auto seconds = number(argv[4], 1, 3600), fps = number(argv[5], 1, 30);
     UdpSocket socket(Endpoint::parse("0.0.0.0", 0));
     std::vector<std::byte> frame(raw_header_size + preview_capacity);
-    const bool h264 = std::string_view(argv[1]) == "--h264";
     std::vector<std::byte> compressed(h264 ? h264_capacity : 0);
     std::unique_ptr<H264Encoder> encoder;
     Dimensions encoder_size{};
@@ -45,8 +48,9 @@ int capture_main(int argc, char **argv) {
             if (h264) {
                 if (!encoder || encoder_size != captured->size) {
                     encoder = std::make_unique<H264Encoder>(captured->size.width,
-                                                            captured->size.height, fps);
+                                                            captured->size.height, fps, backend);
                     encoder_size = captured->size;
+                    std::cout << "Encoder: " << encoder->name() << '\n' << std::flush;
                 }
                 const auto before = now_us();
                 const auto size = encoder->encode(

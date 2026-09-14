@@ -9,10 +9,12 @@
         if (!(x))                                                                                  \
             throw std::runtime_error(#x);                                                          \
     } while (false)
-int main() {
+int main(int argc, char **argv) {
     using namespace larp;
-    H264Encoder encoder(320, 180, 30);
-    H264Decoder decoder;
+    const auto encode_backend = argc > 1 ? parse_codec_backend(argv[1]) : CodecBackend::software;
+    const auto decode_backend = argc > 2 ? parse_codec_backend(argv[2]) : CodecBackend::software;
+    H264Encoder encoder(320, 180, 30, encode_backend);
+    H264Decoder decoder(decode_backend);
     std::vector<std::byte> rgb(320 * 180 * 3, std::byte{90});
     std::vector<std::byte> encoded(h264_capacity), output(rgb.size());
     std::uint64_t bytes = 0;
@@ -31,8 +33,23 @@ int main() {
         CHECK(!decoder.decode(std::span(encoded).first(size), output));
     }
     CHECK(!decoder.decode({}, output));
+    const std::array<std::array<unsigned, 3>, 3> colors{
+        {{180, 30, 60}, {10, 160, 230}, {70, 200, 20}}};
+    for (unsigned y = 0; y < 180; ++y)
+        for (unsigned x = 0; x < 320; ++x)
+            for (unsigned channel = 0; channel < 3; ++channel)
+                rgb[(y * 320 + x) * 3 + channel] =
+                    std::byte(colors[std::min(x / 107, 2U)][channel]);
+    auto colored_size = encoder.encode(rgb, encoded);
+    CHECK(decoder.decode(std::span(encoded).first(colored_size), output));
+    for (unsigned band = 0; band < 3; ++band)
+        for (unsigned channel = 0; channel < 3; ++channel)
+            CHECK(std::abs(int(std::to_integer<unsigned>(
+                               output[(90 * 320 + 50 + band * 107) * 3 + channel])) -
+                           int(colors[band][channel])) <= 6);
+    std::fill(rgb.begin(), rgb.end(), std::byte{90});
     auto size = encoder.encode(rgb, encoded);
-    H264Decoder late_joiner;
+    H264Decoder late_joiner(decode_backend);
     CHECK(late_joiner.decode(std::span(encoded).first(size), output));
     auto dependent = encoded;
     std::size_t end = 20;
@@ -75,7 +92,7 @@ int main() {
     CHECK(!decoder.decode(std::span(encoded).first(size), output));
     bool rejected = false;
     try {
-        H264Encoder invalid(4096, 2160, 30);
+        H264Encoder invalid(4096, 2160, 30, encode_backend);
     } catch (const std::exception &) {
         rejected = true;
     }
@@ -87,7 +104,7 @@ int main() {
         rejected = true;
     }
     CHECK(rejected);
-    H264Encoder odd(319, 179, 5);
+    H264Encoder odd(319, 179, 5, encode_backend);
     size = odd.encode(std::span(rgb).first(319 * 179 * 3), encoded);
     auto decoded = decoder.decode(std::span(encoded).first(size), output);
     CHECK(decoded && decoded->width == 318 && decoded->height == 178);

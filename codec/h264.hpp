@@ -4,15 +4,20 @@
 #include <memory>
 #include <optional>
 #include <span>
+#include <string_view>
 namespace larp {
+enum class CodecBackend { software, nvidia };
+CodecBackend parse_codec_backend(std::string_view name);
 inline constexpr std::size_t h264_capacity = 256 * 1024;
 struct DecodedSize {
     std::uint32_t width, height;
 };
 class H264Encoder {
   public:
-    H264Encoder(std::uint32_t width, std::uint32_t height, unsigned fps);
+    H264Encoder(std::uint32_t width, std::uint32_t height, unsigned fps,
+                CodecBackend backend = CodecBackend::software);
     ~H264Encoder();
+    std::string_view name() const;
     std::size_t encode(std::span<const std::byte> rgb, std::span<std::byte> output);
 
   private:
@@ -21,8 +26,9 @@ class H264Encoder {
 };
 class H264Decoder {
   public:
-    H264Decoder();
+    explicit H264Decoder(CodecBackend backend = CodecBackend::software);
     ~H264Decoder();
+    std::string_view name() const;
     std::optional<DecodedSize> decode(std::span<const std::byte> encoded, std::span<std::byte> rgb);
 
   private:
