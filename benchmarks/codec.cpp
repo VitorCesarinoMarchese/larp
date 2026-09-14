@@ -5,11 +5,15 @@
 int main(int argc, char **argv) {
     try {
         using namespace larp;
-        if (argc != 2)
-            throw std::invalid_argument("Usage: larp-codec-bench FRAMES");
+        if (argc != 2 && argc != 4)
+            throw std::invalid_argument(
+                "Usage: larp-codec-bench FRAMES [ENCODER DECODER], software or nvidia");
         const auto frames = number(argv[1], 1, 1000000);
-        H264Encoder encoder(320, 180, 30);
-        H264Decoder decoder;
+        H264Encoder encoder(320, 180, 30,
+                            argc == 4 ? parse_codec_backend(argv[2]) : CodecBackend::software);
+        H264Decoder decoder(argc == 4 ? parse_codec_backend(argv[3]) : CodecBackend::software);
+        std::cout << "Encoder: " << encoder.name() << " Decoder: " << decoder.name() << '\n'
+                  << std::flush;
         std::vector<std::byte> rgb(320 * 180 * 3), encoded(h264_capacity), decoded(rgb.size());
         std::uint64_t encode_us = 0, decode_us = 0, bytes = 0;
         for (std::uint64_t id = 1; id <= frames; ++id) {
