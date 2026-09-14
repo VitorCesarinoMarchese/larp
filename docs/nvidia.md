@@ -94,6 +94,10 @@ These encoder settings are not matched for visual quality or bitrate. NVENC emit
 
 ## Driver leak blocks acceptance
 
+The [follow-up investigation](nvidia-leak-investigation.md) isolates the CUDA
+baseline to an application-profile name collision and the additional growth
+to encoder-library load/unload cycles. It includes reproducible comparisons.
+
 The installed NVIDIA driver is 615.71.09. Unmodified ASan settings prevent CUDA initialization with `CUDA_ERROR_OUT_OF_MEMORY`, despite available VRAM. Disabling protection of ASan's address-space gap allows initialization. This CUDA compatibility setting is described in the [sanitizer maintainers' issue](https://github.com/google/sanitizers/issues/629).
 
 All 14 software tests pass with normal ASan, LeakSanitizer, and UBSan settings:
@@ -124,4 +128,4 @@ ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 ./build-sanitize/larp-nvenc-ses
 
 An independent FFmpeg CLI NVDEC run, with the ASan runtime preloaded, also reports 231 bytes in five allocations. Reproduction commands are in [the measurement log](../benchmarks/results/milestone-five-nvidia.log).
 
-No leak suppression, disabled leak detection, or driver-unload workaround was added. Sustained streaming has stable measured memory, but repeated codec lifecycles still violate the no-leaks requirement. Completing milestone 5 requires a driver and library combination that passes these probes and the hardware sanitizer suite. The system driver has not been changed, and milestone 6 has not started.
+No leak suppression, disabled leak detection, or driver-unload workaround was added. Sustained streaming has stable measured memory, but repeated encoder-library load/unload cycles still violate the no-leaks requirement. Completing milestone 5 requires a driver and library combination that passes these probes and the hardware sanitizer suite. The system driver has not been changed, and milestone 6 has not started.
