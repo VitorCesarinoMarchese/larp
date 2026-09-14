@@ -1,3 +1,4 @@
+#include "codec/h264.hpp"
 #include "common/runtime.hpp"
 #include "media/raw_frame.hpp"
 #include "platform/udp.hpp"
@@ -6,12 +7,14 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <vector>
 int main(int argc, char **argv) {
     try {
-        const bool raw_mode = argc > 1 && std::string_view(argv[1]) == "--raw";
+        const bool h264_mode = argc > 1 && std::string_view(argv[1]) == "--h264";
+        const bool raw_mode = h264_mode || (argc > 1 && std::string_view(argv[1]) == "--raw");
         if ((!raw_mode && argc != 4 && argc != 5) || (raw_mode && argc != 6 && argc != 7)) {
             std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS [FRAME_TIMEOUT_MS]\n"
-                         "       larp-client --raw BIND_IPv4 PORT SECONDS OUTPUT.ppm "
+                         "       larp-client --raw|--h264 BIND_IPv4 PORT SECONDS OUTPUT.ppm "
                          "[FRAME_TIMEOUT_MS]\n";
             return 1;
         }
@@ -24,6 +27,9 @@ int main(int argc, char **argv) {
             argc == (raw_mode ? 7 : 5) ? number(argv[raw_mode ? 6 : 4], 1, 1000) : 100;
         UdpSocket socket(local);
         Reassembler reassembly{std::chrono::milliseconds(timeout_ms)};
+        auto decoder = h264_mode ? std::make_unique<H264Decoder>() : nullptr;
+        std::vector<std::byte> decoded(h264_mode ? 320 * 180 * 3 : 0);
+        std::uint64_t decode_us = 0, decode_attempts = 0;
         std::optional<Endpoint> peer;
         std::array<std::byte, datagram_size> wire{};
         std::uint64_t packets = 0, bytes = 0, valid = 0, corrupt = 0, foreign = 0;
@@ -52,7 +58,9 @@ int main(int argc, char **argv) {
                       << static_cast<double>(bytes - previous_bytes) * 8.0 / elapsed / 1000000.0
                       << " Mbps Validated: " << valid << " Corrupt: " << corrupt
                       << " Invalid: " << s.invalid << " Duplicates: " << s.duplicates
-                      << " Stale: " << s.stale << " Foreign: " << foreign << " \n"
+                      << " Stale: " << s.stale << " Foreign: " << foreign
+                      << " Decode mean us: " << (decode_attempts ? decode_us / decode_attempts : 0)
+                      << " \n"
                       << std::flush;
             report_time = now;
             previous_valid = valid;
@@ -80,7 +88,19 @@ int main(int argc, char **argv) {
                         if (frame) {
                             bool correct = true;
                             if (raw_mode) {
-                                const auto raw = read_raw_frame(*frame);
+                                std::optional<RawFrameView> raw;
+                                if (h264_mode) {
+                                    const auto before = now_us();
+                                    const auto size = decoder->decode(*frame, decoded);
+                                    decode_us += now_us() - before;
+                                    ++decode_attempts;
+                                    if (size)
+                                        raw = RawFrameView{
+                                            size->width, size->height,
+                                            std::span(decoded).first(std::size_t(size->width) *
+                                                                     size->height * 3)};
+                                } else
+                                    raw = read_raw_frame(*frame);
                                 correct = raw.has_value();
                                 if (raw && valid == 0) {
                                     std::ofstream image(argv[5],

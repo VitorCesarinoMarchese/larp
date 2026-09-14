@@ -1,4 +1,5 @@
 #include "common/runtime.hpp"
+#include "host/h264_main.hpp"
 #ifdef LARP_CAPTURE
 #include "host/capture_main.hpp"
 #endif
@@ -11,7 +12,10 @@
 #include <vector>
 int main(int argc, char **argv) {
     try {
-        if (argc > 1 && std::string_view(argv[1]) == "--capture") {
+        if (argc > 1 && std::string_view(argv[1]) == "--h264-synthetic")
+            return h264_synthetic_main(argc, argv);
+        if (argc > 1 &&
+            (std::string_view(argv[1]) == "--capture" || std::string_view(argv[1]) == "--h264")) {
 #ifdef LARP_CAPTURE
             return capture_main(argc, argv);
 #else
