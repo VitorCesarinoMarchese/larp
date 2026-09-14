@@ -17,6 +17,8 @@ Low-latency Adaptive Remote Protocol. Milestones 1 through 4 transport synthetic
 - [ ] Milestone 11: Linux and Windows interoperability
 - [ ] Milestone 12: internet transport, NAT traversal, and broader networking work
 
+Milestone 5's NVIDIA backends are implemented and pass functional tests. Acceptance remains blocked by driver leaks reproduced outside L.A.R.P. See [the NVIDIA guide](docs/nvidia.md) for evidence and reproduction commands.
+
 Each completed milestone has implementation notes and measurements in [`docs/`](docs/). Development stops for review at the end of each milestone.
 
 ## Build and test

@@ -1,0 +1,100 @@
+Milestone 5 implementation and acceptance blocker, 2026-09-14
+Branch: feat/nvidia-codec
+Local GPU: NVIDIA GeForce GTX 1660 Ti, driver 615.71.09
+Remote notept: Intel Iris Xe Graphics, no libcuda.so.1
+FFmpeg pkg-config: libavcodec 63.1.101, libavutil 61.1.101, libswscale 10.1.101
+
+TDD red evidence:
+  h264-test did not compile: CodecBackend and parse_codec_backend were undefined.
+  h264_client.py failed: old CLI rejected --codec software.
+  Unsupported YUV444 stream test first terminated the NVDEC client.
+  After rejecting without terminating, the next valid frame was still rejected:
+    expected Validated: 4 Corrupt: 2; observed Validated: 3 Corrupt: 3.
+  Reopening failed decoder state with the CUDA device reference retained fixed recovery.
+
+Verification:
+  Release, LARP_TEST_NVIDIA=ON: 19/19 CTest tests passed.
+  ASAN_OPTIONS=detect_leaks=1, ctest -LE nvidia: 14/14 passed.
+  notept Release, LARP_CAPTURE=OFF: 12/12 passed.
+  notept --codec nvidia host and client both exit 1 with Cannot load libcuda.so.1.
+  Hardware tests include RGB color checks, skips, late joining, dimensions, corruption,
+  packet reordering, incomplete-frame dropping, unsupported-profile recovery, and
+  standalone FFmpeg decoding of NVENC output.
+
+Tailscale NVENC to software:
+  larp-host --h264-synthetic 100.118.75.118 5051 300 30 --codec nvidia
+  Encoded: 300 Packets: 15908 Bytes: 18454738 Encode mean us: 1203
+  Host RSS KiB: samples=42 min=181156 max=207432 first=207432 last=181156
+  Receiver: Validated: 300 Corrupt: 0 Dropped: 0 Missing: 0 Decode mean us: 4694
+  Receiver RSS KiB: samples=70 min=36512 max=36512 first=36512 last=36512
+
+Tailscale software to NVDEC:
+  notept: larp-host --h264-synthetic 100.127.119.2 5052 300 30 --codec software
+  Local: larp-client --h264 100.127.119.2 5052 16 /tmp/larp-m5-nvdec.ppm --codec nvidia
+  Encoded: 300 Packets: 7180 Bytes: 8262523 Encode mean us: 2764
+  Receiver: Validated: 300 Corrupt: 0 Dropped: 0 Missing: 0 Decode mean us: 1411
+  Receiver RSS KiB: samples=72 min=185800 max=207792 first=207792 last=185800
+
+Tailscale NVENC capture to software, receiver confirmed listening before capture:
+  Remote build: /tmp/larp-m5.X3KYnh/build
+  larp-client --h264 100.118.75.118 5054 100 /tmp/larp-m5.X3KYnh/capture.ppm
+  larp-host --h264 100.118.75.118 5054 30 10 --codec nvidia
+  Captured: 298 Packets: 3576 Superseded: 0 Malformed: 0 Timeouts: 0 Bytes: 4084377 Encode mean us: 820
+  Host RSS KiB: samples=242 min=20856 max=241288 first=20856 last=241288
+  Host GPU MiB: samples=29 min=78 max=78 first=78 last=78
+  Receiver: Packets: 3576 Validated: 298 Corrupt: 0 Dropped: 0 Missing: 0
+  Receiver: Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 Invalid: 0 Stale: 0 Foreign: 0
+  Receiver Decode mean us: 2389
+  Receiver RSS KiB: samples=489 min=27668 max=30580 first=27668 last=30412
+  Capture RSS includes chooser time and initialization, not just steady streaming.
+  Retrieved and visually inspected 320x180 PPM, 172815 bytes including header.
+  Earlier port-5053 capture was local encoding only: SSH authentication prevented
+  receiver startup. It is excluded from successful transfer counts.
+
+15,000-frame software benchmark:
+  python3 benchmarks/rss.py build-release/larp-codec-bench 15000 software software
+  Frames: 15000 Bytes: 414368376 Encode mean us: 843 Decode mean us: 829
+  RSS KiB: samples=123 min=28196 max=28408 first=28408 last=28236
+
+15,000-frame NVIDIA benchmark:
+  python3 benchmarks/rss.py --gpu build-release/larp-codec-bench 15000 nvidia nvidia
+  Frames: 15000 Bytes: 925798931 Encode mean us: 694 Decode mean us: 1090
+  RSS KiB: samples=131 min=371348 max=371348 first=371348 last=371348
+  GPU MiB: samples=27 min=159 max=159 first=159 last=159
+  Process absent from nvidia-smi compute-apps after exit.
+  CRF 23 and constant QP 23 are not equivalent quality or bitrate settings.
+
+Acceptance blocker: external driver leaks, not suppressed.
+  Default ASan hardware runs fail cuInit with CUDA_ERROR_OUT_OF_MEMORY.
+  GPU reported 5172 MiB free during investigation.
+  protect_shadow_gap=0 allows CUDA initialization, retaining leak detection.
+  ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 ctest --test-dir build-sanitize -L nvidia --output-on-failure
+  All 5 hardware tests fail at shutdown on LeakSanitizer reports.
+  Leak summaries: nvenc 279 bytes/6 allocations, nvdec 231/5, nvidia-roundtrip 279/6.
+  Subprocess tests also fail on the encoder's 279-byte leak report.
+  No other ASan or UBSan diagnostic appeared in this run.
+
+Independent CUDA probe, no FFmpeg or L.A.R.P. codec code linked:
+  ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 build-sanitize/larp-cuda-init
+  cuInit: 0
+  SUMMARY: AddressSanitizer: 183 byte(s) leaked in 4 allocation(s).
+  Direct allocation stack: calloc -> libcuda.so.1+0x30caea -> cuInit.
+  A standalone experiment creating and destroying ten CUDA contexts gave the same
+  183-byte baseline. RTLD_NODELETE did not remove it; no such workaround was added.
+
+Independent FFmpeg NVENC session probe, no L.A.R.P. codec implementation:
+  ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 build-sanitize/larp-nvenc-sessions 1
+  Opened and closed NVENC sessions: 1
+  SUMMARY: AddressSanitizer: 279 byte(s) leaked in 6 allocation(s).
+  ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 build-sanitize/larp-nvenc-sessions 10
+  Opened and closed NVENC sessions: 10
+  SUMMARY: AddressSanitizer: 1143 byte(s) leaked in 24 allocation(s).
+  Additional stacks include pthread_cond_broadcast called from the NVIDIA library.
+
+Independent FFmpeg CLI NVDEC reproduction on this system:
+  ffmpeg -hide_banner -v error -f lavfi -i color=c=gray:s=320x180:r=30 -frames:v 3 -c:v libx264 -preset ultrafast -tune zerolatency -g 1 -bf 0 -f h264 -y /tmp/larp-m5-driver-probe.h264
+  LD_PRELOAD=/usr/lib/libasan.so.8 ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 ffmpeg -hide_banner -v error -hwaccel cuda -hwaccel_output_format cuda -i /tmp/larp-m5-driver-probe.h264 -vf hwdownload,format=nv12 -f null -
+  SUMMARY: AddressSanitizer: 231 byte(s) leaked in 5 allocation(s).
+
+Milestone 5 remains unchecked pending a driver/library combination that passes
+the leak probes and hardware sanitizer tests. No system driver change was made.
