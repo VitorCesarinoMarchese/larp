@@ -100,3 +100,19 @@ The next useful step is to reproduce these cases on another supported driver
 version, or submit the isolated reproductions to NVIDIA. No driver change or
 external bug report was made. A driver change on this desktop should be a
 separate task because it affects the running graphics session.
+
+## Recheck on 2026-09-21
+
+The installed driver remains 615.71.09. Rebuilt probes reproduce the same
+183-byte CUDA baseline and NVENC totals of 279 bytes for one session,
+1,143 bytes for ten sessions, 279 bytes for ten held-library sessions, and
+1,143 bytes for ten drained sessions. All four profile comparisons match
+the table above.
+
+All 14 non-NVIDIA sanitizer tests pass with `ASAN_OPTIONS=detect_leaks=1`.
+All five NVIDIA sanitizer tests still fail with leak reports using
+`ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0`.
+The [new log](../benchmarks/results/nvidia-recheck-2026-09-21.log) records the
+probe and hardware-suite results. A [NVIDIA report draft](nvidia-bug-report.md)
+now includes standalone build commands and expected results. It has not been
+submitted. No system settings, installed driver files, or leak checks changed.

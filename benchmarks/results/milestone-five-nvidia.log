@@ -1,7 +1,8 @@
+Privacy: machine aliases, private IP addresses, and local home paths are replaced with documentation placeholders where present.
 Milestone 5 implementation and acceptance blocker, 2026-09-14
 Branch: feat/nvidia-codec
 Local GPU: NVIDIA GeForce GTX 1660 Ti, driver 615.71.09
-Remote notept: Intel Iris Xe Graphics, no libcuda.so.1
+Remote receiver-host: Intel Iris Xe Graphics, no libcuda.so.1
 FFmpeg pkg-config: libavcodec 63.1.101, libavutil 61.1.101, libswscale 10.1.101
 
 TDD red evidence:
@@ -15,30 +16,30 @@ TDD red evidence:
 Verification:
   Release, LARP_TEST_NVIDIA=ON: 19/19 CTest tests passed.
   ASAN_OPTIONS=detect_leaks=1, ctest -LE nvidia: 14/14 passed.
-  notept Release, LARP_CAPTURE=OFF: 12/12 passed.
-  notept --codec nvidia host and client both exit 1 with Cannot load libcuda.so.1.
+  receiver-host Release, LARP_CAPTURE=OFF: 12/12 passed.
+  receiver-host --codec nvidia host and client both exit 1 with Cannot load libcuda.so.1.
   Hardware tests include RGB color checks, skips, late joining, dimensions, corruption,
   packet reordering, incomplete-frame dropping, unsupported-profile recovery, and
   standalone FFmpeg decoding of NVENC output.
 
 Tailscale NVENC to software:
-  larp-host --h264-synthetic 100.118.75.118 5051 300 30 --codec nvidia
+  larp-host --h264-synthetic 192.0.2.10 5051 300 30 --codec nvidia
   Encoded: 300 Packets: 15908 Bytes: 18454738 Encode mean us: 1203
   Host RSS KiB: samples=42 min=181156 max=207432 first=207432 last=181156
   Receiver: Validated: 300 Corrupt: 0 Dropped: 0 Missing: 0 Decode mean us: 4694
   Receiver RSS KiB: samples=70 min=36512 max=36512 first=36512 last=36512
 
 Tailscale software to NVDEC:
-  notept: larp-host --h264-synthetic 100.127.119.2 5052 300 30 --codec software
-  Local: larp-client --h264 100.127.119.2 5052 16 /tmp/larp-m5-nvdec.ppm --codec nvidia
+  receiver-host: larp-host --h264-synthetic 192.0.2.20 5052 300 30 --codec software
+  Local: larp-client --h264 192.0.2.20 5052 16 /tmp/larp-m5-nvdec.ppm --codec nvidia
   Encoded: 300 Packets: 7180 Bytes: 8262523 Encode mean us: 2764
   Receiver: Validated: 300 Corrupt: 0 Dropped: 0 Missing: 0 Decode mean us: 1411
   Receiver RSS KiB: samples=72 min=185800 max=207792 first=207792 last=185800
 
 Tailscale NVENC capture to software, receiver confirmed listening before capture:
   Remote build: /tmp/larp-m5.X3KYnh/build
-  larp-client --h264 100.118.75.118 5054 100 /tmp/larp-m5.X3KYnh/capture.ppm
-  larp-host --h264 100.118.75.118 5054 30 10 --codec nvidia
+  larp-client --h264 192.0.2.10 5054 100 /tmp/larp-m5.X3KYnh/capture.ppm
+  larp-host --h264 192.0.2.10 5054 30 10 --codec nvidia
   Captured: 298 Packets: 3576 Superseded: 0 Malformed: 0 Timeouts: 0 Bytes: 4084377 Encode mean us: 820
   Host RSS KiB: samples=242 min=20856 max=241288 first=20856 last=241288
   Host GPU MiB: samples=29 min=78 max=78 first=78 last=78

@@ -8,16 +8,16 @@ The normal build still needs only the FFmpeg development libraries. NVIDIA opera
 
 Software remains the default. Append `--codec nvidia` to an H.264 host or client command to request hardware explicitly. Initialization errors stop the requested operation rather than silently selecting software. Use `--codec software` for the software fallback.
 
-On the Intel receiver, `notept`:
+On the Intel receiver, `receiver-host`:
 
 ```sh
-./build-release/larp-client --h264 100.118.75.118 5000 60 /tmp/nvenc-preview.ppm --codec software
+./build-release/larp-client --h264 192.0.2.10 5000 60 /tmp/nvenc-preview.ppm --codec software
 ```
 
 On the NVIDIA development machine:
 
 ```sh
-./build-release/larp-host --h264 100.118.75.118 5000 30 10 --codec nvidia
+./build-release/larp-host --h264 192.0.2.10 5000 30 10 --codec nvidia
 ```
 
 Confirm that the receiver prints `Listening` before starting capture. Select a monitor in the desktop portal. The host prints `Encoder: h264_nvenc` after initialization. To avoid the chooser, use `--h264-synthetic` with a frame count in place of capture duration.
@@ -25,13 +25,13 @@ Confirm that the receiver prints `Listening` before starting capture. Select a m
 To test NVDEC, reverse the direction. Start this client on the development machine:
 
 ```sh
-./build-release/larp-client --h264 100.127.119.2 5000 20 /tmp/nvdec-preview.ppm --codec nvidia
+./build-release/larp-client --h264 192.0.2.20 5000 20 /tmp/nvdec-preview.ppm --codec nvidia
 ```
 
-Then run this host on `notept`:
+Then run this host on `receiver-host`:
 
 ```sh
-./build-release/larp-host --h264-synthetic 100.127.119.2 5000 300 30 --codec software
+./build-release/larp-host --h264-synthetic 192.0.2.20 5000 300 30 --codec software
 ```
 
 The client prints `Decoder: h264+nvdec`. Its decoder requires CUDA output frames before downloading them to RGB. Restart the receiver between host sessions. The optional frame timeout still precedes the final `--codec` option. Raw and byte-pattern modes do not accept codec selection.
@@ -68,9 +68,9 @@ Verified Tailscale transfers:
 
 | Transfer | Sent | Decoded | Corrupt | Mean encode, us | Mean decode, us |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| NVENC synthetic to software on `notept` | 300 | 300 | 0 | 1,203 | 4,694 |
-| Software on `notept` to NVDEC | 300 | 300 | 0 | 2,764 | 1,411 |
-| NVENC screen capture to software on `notept` | 298 | 298 | 0 | 820 | 2,389 |
+| NVENC synthetic to software on `receiver-host` | 300 | 300 | 0 | 1,203 | 4,694 |
+| Software on `receiver-host` to NVDEC | 300 | 300 | 0 | 2,764 | 1,411 |
+| NVENC screen capture to software on `receiver-host` | 298 | 298 | 0 | 820 | 2,389 |
 
 The capture run lasted 30 seconds at a requested 10 FPS. It sent 3,576 packets with no missing or stale packets, malformed captures, or capture timeouts. The decoded desktop snapshot was retrieved and visually inspected. Screen images remain outside the repository. An earlier capture attempt had no listening receiver because SSH authentication blocked startup; it is not counted as transfer evidence.
 
@@ -128,4 +128,4 @@ ASAN_OPTIONS=detect_leaks=1:protect_shadow_gap=0 ./build-sanitize/larp-nvenc-ses
 
 An independent FFmpeg CLI NVDEC run, with the ASan runtime preloaded, also reports 231 bytes in five allocations. Reproduction commands are in [the measurement log](../benchmarks/results/milestone-five-nvidia.log).
 
-No leak suppression, disabled leak detection, or driver-unload workaround was added. Sustained streaming has stable measured memory, but repeated encoder-library load/unload cycles still violate the no-leaks requirement. Completing milestone 5 requires a driver and library combination that passes these probes and the hardware sanitizer suite. The system driver has not been changed, and milestone 6 has not started.
+No leak suppression, disabled leak detection, or driver-unload workaround was added. Sustained streaming has stable measured memory, but repeated encoder-library load/unload cycles still violate the no-leaks requirement. Completing milestone 5 requires a driver and library combination that passes these probes and the hardware sanitizer suite. The system driver has not been changed. Milestone 6 now proceeds independently with the software codec; see [live rendering](rendering.md).

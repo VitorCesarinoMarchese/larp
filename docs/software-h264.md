@@ -1,6 +1,6 @@
 # Software H.264
 
-Milestone 4 adds FFmpeg software encoding and decoding to the existing preview transport. Live screen capture, Tailscale transfer to `notept`, and decoded snapshot output are verified.
+Milestone 4 adds FFmpeg software encoding and decoding to the existing preview transport. Live screen capture, Tailscale transfer to `receiver-host`, and decoded snapshot output are verified.
 
 ## Run the preview
 
@@ -9,13 +9,13 @@ Build with the `libavcodec`, `libavutil`, and `libswscale` development libraries
 On the receiving Tailscale machine:
 
 ```sh
-./build-release/larp-client --h264 100.118.75.118 5000 40 /tmp/decoded.ppm
+./build-release/larp-client --h264 192.0.2.10 5000 40 /tmp/decoded.ppm
 ```
 
 On the development machine:
 
 ```sh
-./build-release/larp-host --h264 100.118.75.118 5000 20 10
+./build-release/larp-host --h264 192.0.2.10 5000 20 10
 ```
 
 Select a monitor and confirm sharing in the desktop portal. The host's duration starts after selection. Allow enough time in the client command for selection, or restart the receiver if its duration expires.
@@ -25,7 +25,7 @@ The receiver saves its first decoded image as a P6 PPM file. Subsequent images c
 To test without a desktop chooser:
 
 ```sh
-./build-release/larp-host --h264-synthetic 100.118.75.118 5000 900 30
+./build-release/larp-host --h264-synthetic 192.0.2.10 5000 900 30
 ```
 
 The first synthetic image is uniform gray. Later images contain a changing deterministic pattern. The frame count is 1 through 1,000,000,000, and FPS is 1 through 30. The capture command accepts 1 through 3,600 seconds and 1 through 30 FPS. The client retains the existing optional frame timeout argument after the output path.
@@ -73,12 +73,12 @@ Tests cover 1,000 encode cycles, skipped frames, late joining, malformed compres
 Run the RSS sampler around either executable:
 
 ```sh
-python3 benchmarks/rss.py ./build-release/larp-host --h264-synthetic 100.118.75.118 5000 900 30
+python3 benchmarks/rss.py ./build-release/larp-host --h264-synthetic 192.0.2.10 5000 900 30
 ```
 
 It reports minimum, maximum, first, and last RSS every 200 ms after a two-second warmup, retaining only aggregate values. Encoder and decoder statistics report mean local processing time in microseconds. These values include color conversion and media validation work, exclude codec initialization, and do not measure glass-to-glass latency.
 
-All 13 tests pass in Release and with AddressSanitizer, LeakSanitizer, and UndefinedBehaviorSanitizer. All 11 capture-disabled tests also pass on `notept`. Standalone FFmpeg successfully decoded an emitted access unit. A decoded remote desktop snapshot was retrieved and visually inspected. Screen images remain outside the repository.
+All 13 tests pass in Release and with AddressSanitizer, LeakSanitizer, and UndefinedBehaviorSanitizer. All 11 capture-disabled tests also pass on `receiver-host`. Standalone FFmpeg successfully decoded an emitted access unit. A decoded remote desktop snapshot was retrieved and visually inspected. Screen images remain outside the repository.
 
 The initial 900-frame Tailscale run at 30 FPS delivered 898 frames. Two expired; subsequent frames decoded with no corruption. Host RSS remained 25,980 KiB and receiver RSS remained 30,608 KiB after warmup. Mean encode time was 1,855 microseconds; mean decode time was 3,017 microseconds. This run preceded the stricter SPS/PPS validation.
 

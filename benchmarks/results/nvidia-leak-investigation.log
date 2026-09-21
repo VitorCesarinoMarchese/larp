@@ -1,3 +1,4 @@
+Privacy: machine aliases, private IP addresses, and local home paths are replaced with documentation placeholders where present.
 2026-09-14: NVIDIA 615.71.09, GTX 1660 Ti, glibc 2.44, FFmpeg 9.0.1
 Commands and interpretation: docs/nvidia-leak-investigation.md
 
@@ -15,10 +16,10 @@ Direct leak of 56 byte(s) in 1 object(s) allocated from:
     #3 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #4 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #5 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #6 0x558ade2d13b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #6 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #7 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #8 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #9 0x558ade2d1164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #9 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 Indirect leak of 96 byte(s) in 1 object(s) allocated from:
     #0 0x7fb2f9b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
@@ -27,10 +28,10 @@ Indirect leak of 96 byte(s) in 1 object(s) allocated from:
     #3 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #4 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #5 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #6 0x558ade2d13b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #6 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #7 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #8 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #9 0x558ade2d1164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #9 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 Indirect leak of 22 byte(s) in 1 object(s) allocated from:
     #0 0x7fb2f9b2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
@@ -40,10 +41,10 @@ Indirect leak of 22 byte(s) in 1 object(s) allocated from:
     #4 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #5 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #6 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #7 0x558ade2d13b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #7 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #8 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #9 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #10 0x558ade2d1164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #10 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 Indirect leak of 9 byte(s) in 1 object(s) allocated from:
     #0 0x7fb2f9b2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
@@ -54,10 +55,10 @@ Indirect leak of 9 byte(s) in 1 object(s) allocated from:
     #5 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #6 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #7 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #8 0x558ade2d13b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #8 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #9 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #10 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #11 0x558ade2d1164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #11 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 SUMMARY: AddressSanitizer: 183 byte(s) leaked in 4 allocation(s).
 PROFILE RESULT: original exit=1
@@ -77,10 +78,10 @@ Direct leak of 56 byte(s) in 1 object(s) allocated from:
     #3 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #4 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #5 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #6 0x5651ade503b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #6 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #7 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #8 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #9 0x5651ade50164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #9 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 Indirect leak of 96 byte(s) in 1 object(s) allocated from:
     #0 0x7f7a3172bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
@@ -89,10 +90,10 @@ Indirect leak of 96 byte(s) in 1 object(s) allocated from:
     #3 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #4 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #5 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #6 0x5651ade503b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #6 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #7 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #8 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #9 0x5651ade50164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #9 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 Indirect leak of 22 byte(s) in 1 object(s) allocated from:
     #0 0x7f7a3172c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
@@ -102,10 +103,10 @@ Indirect leak of 22 byte(s) in 1 object(s) allocated from:
     #4 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #5 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #6 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #7 0x5651ade503b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #7 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #8 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #9 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #10 0x5651ade50164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #10 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 Indirect leak of 9 byte(s) in 1 object(s) allocated from:
     #0 0x7f7a3172c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
@@ -116,10 +117,10 @@ Indirect leak of 9 byte(s) in 1 object(s) allocated from:
     #5 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #6 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
     #7 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
-    #8 0x5651ade503b7 in main /home/tept/larp/benchmarks/cuda_init.cpp:18
+    #8 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
     #9 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
     #10 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
-    #11 0x5651ade50164 in _start (/home/tept/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+    #11 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
 
 SUMMARY: AddressSanitizer: 183 byte(s) leaked in 4 allocation(s).
 PROFILE RESULT: minimal-duplicate exit=1

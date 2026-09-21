@@ -1,0 +1,18 @@
+Listening: 59594
+GPU library mappings: []
+FPS: 0.00 Packets: 149 Observed packet loss: N/A Frame loss: N/A Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 2.13 Mbps Validated: 0 Corrupt: 0 Invalid: 149 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 0 Presented: 0 Present mean us: 0 Present max us: 0 
+iteration=0 exit=0 close_seconds=0.077
+
+Corrected fixture: transport payload_size is per packet, not total frame bytes.
+Listening: 49529
+
+Small valid color fixture; allow compositor color rounding of 3 levels.
+Screenshot: RGB quadrants and black bars pass.
+GPU library mappings: []
+Listening: 33075
+FPS: 0.99 Packets: 1 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 1 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 0 Presented: 1 Present mean us: 2480 Present max us: 2480 
+FPS: 0.00 Packets: 1 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 1 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 0 Presented: 1 Present mean us: 2480 Present max us: 2480 
+iteration=0 exit=0 close_seconds=0.066
+Listening: 56872
+FPS: 0.00 Packets: 0 Observed packet loss: N/A Frame loss: N/A Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 0 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 0 Presented: 0 Present mean us: 0 Present max us: 0 
+iteration=1 exit=0 close_seconds=0.054

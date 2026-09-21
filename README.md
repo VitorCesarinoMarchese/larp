@@ -19,11 +19,19 @@ Low-latency Adaptive Remote Protocol. Milestones 1 through 4 transport synthetic
 
 Milestone 5's NVIDIA backends are implemented and pass functional tests. Acceptance remains blocked by driver leaks reproduced outside L.A.R.P. See [the NVIDIA guide](docs/nvidia.md) for evidence and reproduction commands.
 
+Milestone 6's live Linux preview is implemented and verified locally with the
+software codec. Two-machine Tailscale acceptance is pending. See
+[the rendering guide](docs/rendering.md) for commands and measurements.
+
 Each completed milestone has implementation notes and measurements in [`docs/`](docs/). Development stops for review at the end of each milestone.
 
 ## Build and test
 
 Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration tests and RSS benchmarks. All builds require the FFmpeg `libavcodec`, `libavutil`, and `libswscale` development libraries. Software encoding requires FFmpeg with `libx264`. Capture-enabled builds also require the PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` to build the transport, software codec, and receiver without desktop capture.
+
+Live preview builds require SDL3 3.2 or newer. Use `-DLARP_RENDER=OFF` to omit
+SDL3 and the window. Live windows use X11 or Xwayland; snapshot modes remain
+usable without a display.
 
 ```sh
 cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
@@ -40,6 +48,11 @@ ASAN_OPTIONS=detect_leaks=1 ctest --test-dir build-sanitize --output-on-failure
 ```
 
 ## Run a transfer
+
+Machine names and non-loopback IP addresses in documentation and saved logs are
+placeholders. Replace `receiver-host` with your own SSH alias and example IPs
+with the intended machine's address. The examples use reserved documentation
+address ranges, including where they describe Tailscale tests.
 
 Start the client in one terminal:
 
@@ -75,13 +88,13 @@ See the [protocol reference](docs/protocol.md) for command limits and statistic 
 To use a 50 ms expiry deadline, pass the optional fifth client argument:
 
 ```sh
-./build-release/larp-client 100.118.75.118 5000 12 50
+./build-release/larp-client 192.0.2.10 5000 12 50
 ```
 
 Run the controlled impairment check against an existing remote build:
 
 ```sh
-python3 tests/tailscale_impairment.py notept /tmp/larp-m2.JcrIW0/build 100.118.75.118
+python3 tests/tailscale_impairment.py receiver-host /tmp/larp-m2.JcrIW0/build 192.0.2.10
 ```
 
 The check sends reordered and duplicate packets, omits a packet and a whole frame, waits for expiry, and then sends a late packet followed by a usable frame. It expects three validated frames, one expiry, one replacement, one skipped frame, 20% observed packet loss, and 50% frame loss. Additional network loss can fail this acceptance check. Unit tests verify exact deadlines without wall-clock sleeps.

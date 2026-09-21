@@ -4,6 +4,9 @@
 #include "media/raw_frame.hpp"
 #include "platform/udp.hpp"
 #include "transport/reassembly.hpp"
+#ifdef LARP_RENDER
+#include "render/window.hpp"
+#endif
 #include <array>
 #include <fstream>
 #include <iomanip>
@@ -11,13 +14,18 @@
 #include <vector>
 int main(int argc, char **argv) {
     try {
-        const bool h264_mode = argc > 1 && std::string_view(argv[1]) == "--h264";
+        const std::string_view mode = argc > 1 ? argv[1] : "";
+        const bool view_mode = mode == "--view-h264" || mode == "--view-raw";
+        const bool h264_mode = mode == "--h264" || mode == "--view-h264";
         const auto backend =
             h264_mode ? larp::take_codec_option(argc, argv) : larp::CodecBackend::software;
-        const bool raw_mode = h264_mode || (argc > 1 && std::string_view(argv[1]) == "--raw");
-        if ((!raw_mode && argc != 4 && argc != 5) || (raw_mode && argc != 6 && argc != 7)) {
+        const bool raw_mode = h264_mode || mode == "--raw" || mode == "--view-raw";
+        const int required = raw_mode ? (view_mode ? 5 : 6) : 4;
+        if (argc != required && argc != required + 1) {
             std::cerr << "Usage: larp-client BIND_IPv4 PORT SECONDS [FRAME_TIMEOUT_MS]\n"
                          "       larp-client --raw|--h264 BIND_IPv4 PORT SECONDS OUTPUT.ppm "
+                         "[FRAME_TIMEOUT_MS] [--codec software|nvidia]\n"
+                         "       larp-client --view-raw|--view-h264 BIND_IPv4 PORT SECONDS "
                          "[FRAME_TIMEOUT_MS] [--codec software|nvidia]\n";
             return 1;
         }
@@ -26,13 +34,19 @@ int main(int argc, char **argv) {
         const auto local = Endpoint::parse(
             argv[1 + offset], static_cast<std::uint16_t>(number(argv[2 + offset], 0, 65535)));
         const auto seconds = number(argv[3 + offset], 1, 86400);
-        const auto timeout_ms =
-            argc == (raw_mode ? 7 : 5) ? number(argv[raw_mode ? 6 : 4], 1, 1000) : 100;
+        const auto timeout_ms = argc == required + 1 ? number(argv[required], 1, 1000) : 100;
+#ifdef LARP_RENDER
+        auto window = view_mode ? std::make_unique<VideoWindow>() : nullptr;
+#else
+        if (view_mode)
+            throw std::runtime_error("live preview requires a build with LARP_RENDER=ON");
+#endif
         UdpSocket socket(local);
         Reassembler reassembly{std::chrono::milliseconds(timeout_ms)};
         auto decoder = h264_mode ? std::make_unique<H264Decoder>(backend) : nullptr;
         std::vector<std::byte> decoded(h264_mode ? 320 * 180 * 3 : 0);
         std::uint64_t decode_us = 0, decode_attempts = 0;
+        std::uint64_t presented = 0, present_us = 0, present_max_us = 0;
         std::optional<Endpoint> peer;
         std::array<std::byte, datagram_size> wire{};
         std::uint64_t packets = 0, bytes = 0, valid = 0, corrupt = 0, foreign = 0;
@@ -62,9 +76,12 @@ int main(int argc, char **argv) {
                       << " Mbps Validated: " << valid << " Corrupt: " << corrupt
                       << " Invalid: " << s.invalid << " Duplicates: " << s.duplicates
                       << " Stale: " << s.stale << " Foreign: " << foreign
-                      << " Decode mean us: " << (decode_attempts ? decode_us / decode_attempts : 0)
-                      << " \n"
-                      << std::flush;
+                      << " Decode mean us: " << (decode_attempts ? decode_us / decode_attempts : 0);
+            if (view_mode)
+                std::cout << " Presented: " << presented
+                          << " Present mean us: " << (presented ? present_us / presented : 0)
+                          << " Present max us: " << present_max_us;
+            std::cout << " \n" << std::flush;
             report_time = now;
             previous_valid = valid;
             previous_bytes = bytes;
@@ -72,7 +89,13 @@ int main(int argc, char **argv) {
         std::cout << "Listening: " << socket.local_endpoint().port << std::endl;
         if (decoder)
             std::cout << "Decoder: " << decoder->name() << '\n' << std::flush;
+        if (view_mode)
+            std::cout << "Display: SDL3 CPU surface\n" << std::flush;
         while (now_us() - start < std::uint64_t(seconds) * 1000000) {
+#ifdef LARP_RENDER
+            if (window && !window->poll())
+                break;
+#endif
             const auto received = socket.receive(wire, static_cast<int>(std::min(timeout_ms, 10U)));
             const auto now = now_us();
             reassembly.expire(now);
@@ -107,7 +130,7 @@ int main(int argc, char **argv) {
                                 } else
                                     raw = read_raw_frame(*frame);
                                 correct = raw.has_value();
-                                if (raw && valid == 0) {
+                                if (raw && !view_mode && valid == 0) {
                                     std::ofstream image(argv[5],
                                                         std::ios::binary | std::ios::trunc);
                                     image << "P6\n"
@@ -120,6 +143,16 @@ int main(int argc, char **argv) {
                                     std::cout << "Snapshot: " << raw->width << 'x' << raw->height
                                               << '\n';
                                 }
+#ifdef LARP_RENDER
+                                if (raw && window) {
+                                    const auto before = now_us();
+                                    window->present(*raw);
+                                    const auto elapsed = now_us() - before;
+                                    present_us += elapsed;
+                                    present_max_us = std::max(present_max_us, elapsed);
+                                    ++presented;
+                                }
+#endif
                             } else {
                                 for (std::size_t i = 0; i < frame->size(); ++i)
                                     if ((*frame)[i] != synthetic_byte(header->frame_id, i)) {
