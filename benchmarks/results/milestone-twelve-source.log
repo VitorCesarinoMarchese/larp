@@ -1,0 +1,14 @@
+Acceptance date: 2026-10-03
+Source: working tree based on 09fe19e, including existing milestone-seven work and new session layer.
+Implementation archive SHA-256: 133e855ea51d617e89eea34026fbdbbb66aa0f26dd938f9e98b99ea1d5a046ee
+Remote source: isolated temporary copy; existing checkout untouched.
+Remote Release: capture OFF, render ON, NVIDIA tests OFF.
+Remote sanitized Debug: capture OFF, render OFF, NVIDIA tests ON; software and hardware suites run separately.
+Local Release and sanitized Debug: capture ON, render ON, NVIDIA tests OFF.
+Session crypto: libsodium 1.0.22 on both nodes; XChaCha20-Poly1305, directional KDF keys.
+Remote GPU: NVIDIA GeForce GTX 1660 Ti, driver 615.71.09.
+Transport: real Tailscale IPv4 between two Linux nodes.
+Locked-screen tests: synthetic inputs, SDL dummy displays or decoded snapshots; no desktop capture or portal requests.
+Full local suites passed before final key-boundary and raw heartbeat refinements. Final targeted session checks passed afterward in Release and sanitizers.
+Full remote suites passed before final raw heartbeat refinement. Final sanitized session check passed afterward.
+Hardware leak detection remained enabled; all five NVIDIA checks and the standalone CUDA probe retain their failures.

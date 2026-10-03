@@ -1,5 +1,9 @@
 # Transport decisions
 
+This note records the milestone-one design. Later capture, codec, rendering,
+adaptive streaming, and session work are linked from
+[the documentation index](index.md).
+
 The first milestone uses a single thread per process and direct Linux UDP sockets. There are no worker queues. `platform/udp.hpp` exposes endpoints and spans without Linux socket types. A Windows implementation can replace `platform/udp_linux.cpp` without changing the wire format or reassembler.
 
 The receiver allocates one 4 MiB frame buffer at construction, plus a fixed bitmap of 3,598 entries. Receiving, parsing, and reassembly do not allocate. The host allocates one configured-size frame buffer and reuses a 1,200-byte datagram buffer. Both processes request 256 KiB send and receive socket buffers. Linux may clamp these requests and accounts additional kernel overhead separately from process RSS.
@@ -14,4 +18,12 @@ The host sends each frame as a burst and uses a steady-clock deadline for the ne
 
 The timeout defaults to 100 ms and uses local receipt time. The client allows 1 through 1,000 ms. Shorter timeouts discard delayed frames sooner but can drop usable frames on a jittery path. Comparing remote monotonic timestamps would produce invalid latency measurements. The timeout bounds how long an incomplete frame remains useful, but it cannot distinguish a delayed packet already queued in the network from a fresh packet.
 
-`capture`, `codec`, and `render` reserve the requested directory structure. They have no interfaces or dependencies yet. PipeWire, FFmpeg, hardware acceleration, rendering, control messages, adaptive streaming, and Windows implementations remain outside this milestone.
+At milestone one, `capture`, `codec`, and `render` only reserved the requested
+directory structure. Linux capture, software codecs, rendering, and adaptive
+streaming are now implemented and verified. Adaptive H.264 uses bounded packet
+pacing; see [the pacing measurements](bandwidth.md). The optional
+[session layer](sessions.md) wraps application datagrams in authenticated
+encryption, increasing the maximum UDP payload to 1,248 bytes. It adds bounded
+replay state and negotiates fresh sessions after process or network failures.
+Windows backends remain unimplemented. See
+[current acceptance and blockers](session-verification.md).

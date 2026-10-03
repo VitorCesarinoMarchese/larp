@@ -1,0 +1,7 @@
+Acceptance date: 2026-10-03
+Source: working tree based on 09fe19e, including existing milestone-seven changes.
+Source archive SHA-256: 60454aacb7293c1bdeed7856f0fc3855c6c39b7d8c3ec931e5ae810934c6d3d8
+Remote build: isolated temporary source copy; Release, capture OFF, rendering ON, NVIDIA tests OFF.
+Remote compiler: GCC 16.2.1; FFmpeg libraries 63.1.101 / 61.1.101 / 10.1.101; SDL3 3.4.16.
+Local build: Release and Debug with ASan/LSan/UBSan; capture and rendering ON; NVIDIA tests OFF.
+Transport: Tailscale IPv4; two Linux nodes.

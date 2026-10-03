@@ -1,0 +1,57 @@
+cuInit: 0
+
+=================================================================
+==192212==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7f35f372bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b35e8d0caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b35e8d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b35e8d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b35e8d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b35e8d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x55bad0b7c3b7 in main /tmp/larp-session-acceptance.tUrTt5/benchmarks/cuda_init.cpp:18
+    #7 0x7f35f2627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #8 0x7f35f26278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x55bad0b7c164 in _start (/tmp/larp-session-acceptance.tUrTt5/build-sanitize/larp-cuda-init+0x4164) (BuildId: 08f3793e9cf6ce540070ed0b984261c1843f78a7)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7f35f372bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b35e8d0cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b35e8d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b35e8d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b35e8d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b35e8d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x55bad0b7c3b7 in main /tmp/larp-session-acceptance.tUrTt5/benchmarks/cuda_init.cpp:18
+    #7 0x7f35f2627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #8 0x7f35f26278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x55bad0b7c164 in _start (/tmp/larp-session-acceptance.tUrTt5/build-sanitize/larp-cuda-init+0x4164) (BuildId: 08f3793e9cf6ce540070ed0b984261c1843f78a7)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7f35f372c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b35e8e8bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b35e8d0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b35e8d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b35e8d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b35e8d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7b35e8d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x55bad0b7c3b7 in main /tmp/larp-session-acceptance.tUrTt5/benchmarks/cuda_init.cpp:18
+    #8 0x7f35f2627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x7f35f26278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #10 0x55bad0b7c164 in _start (/tmp/larp-session-acceptance.tUrTt5/build-sanitize/larp-cuda-init+0x4164) (BuildId: 08f3793e9cf6ce540070ed0b984261c1843f78a7)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7f35f372c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b35e8e8ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b35e8e8bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b35e8d0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b35e8d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b35e8d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7b35e8d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7b35e8d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x55bad0b7c3b7 in main /tmp/larp-session-acceptance.tUrTt5/benchmarks/cuda_init.cpp:18
+    #9 0x7f35f2627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #10 0x7f35f26278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #11 0x55bad0b7c164 in _start (/tmp/larp-session-acceptance.tUrTt5/build-sanitize/larp-cuda-init+0x4164) (BuildId: 08f3793e9cf6ce540070ed0b984261c1843f78a7)
+
+SUMMARY: AddressSanitizer: 183 byte(s) leaked in 4 allocation(s).

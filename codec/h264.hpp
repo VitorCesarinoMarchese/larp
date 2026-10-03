@@ -15,8 +15,9 @@ struct DecodedSize {
 class H264Encoder {
   public:
     H264Encoder(std::uint32_t width, std::uint32_t height, unsigned fps,
-                CodecBackend backend = CodecBackend::software);
+                CodecBackend backend = CodecBackend::software, std::uint32_t bitrate = 0);
     ~H264Encoder();
+    void set_bitrate(std::uint32_t bitrate);
     std::string_view name() const;
     std::size_t encode(std::span<const std::byte> rgb, std::span<std::byte> output);
 

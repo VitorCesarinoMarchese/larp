@@ -1,2 +1,3 @@
 #pragma once
-int capture_main(int argc, char **argv);
+#include "transport/session.hpp"
+int capture_main(int argc, char **argv, const larp::NetworkOptions &network);

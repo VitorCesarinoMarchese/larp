@@ -1,0 +1,28 @@
+Window process: 13932
+[libx264 @ 0x5609bbd44500] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5609bbd44500] profile Constrained Baseline, level 1.3, 4:2:0, 8-bit
+Encoder: libx264
+[libx264 @ 0x5609bbd44500] frame I:300   Avg QP:33.95  size: 27522
+[libx264 @ 0x5609bbd44500] mb I  I16..4: 100.0%  0.0%  0.0%
+[libx264 @ 0x5609bbd44500] coded y,uvDC,uvAC intra: 99.7% 99.7% 99.7%
+[libx264 @ 0x5609bbd44500] i16 v,h,dc,p:  0%  0% 97%  2%
+[libx264 @ 0x5609bbd44500] i8c dc,h,v,p: 84%  1%  1% 14%
+[libx264 @ 0x5609bbd44500] kb/s:6605.22
+Encoded: 300 Packets: 7180 Bytes: 8262523 Encode mean us: 3045
+Listening: 50424
+Decoder: h264
+Display: SDL3 CPU surface
+FPS: 28.91 Packets: 676 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.38 Mbps Validated: 29 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2605 Presented: 29 Present mean us: 11858 Present max us: 18454 
+FPS: 29.95 Packets: 1396 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.81 Mbps Validated: 59 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2595 Presented: 59 Present mean us: 10690 Present max us: 18454 
+FPS: 29.99 Packets: 2116 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 89 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2636 Presented: 89 Present mean us: 10060 Present max us: 18454 
+FPS: 29.99 Packets: 2836 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 119 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2627 Presented: 119 Present mean us: 9883 Present max us: 18454 
+FPS: 29.71 Packets: 3556 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.76 Mbps Validated: 149 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2585 Presented: 149 Present mean us: 9685 Present max us: 18454 
+FPS: 29.99 Packets: 4276 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 179 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2575 Presented: 179 Present mean us: 9476 Present max us: 18454 
+FPS: 29.95 Packets: 4997 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 209 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2518 Presented: 209 Present mean us: 9364 Present max us: 18454 
+FPS: 30.38 Packets: 5740 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.90 Mbps Validated: 240 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2526 Presented: 240 Present mean us: 9256 Present max us: 18454 
+FPS: 29.97 Packets: 6460 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 270 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2535 Presented: 270 Present mean us: 9187 Present max us: 18454 
+FPS: 29.96 Packets: 7180 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 300 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2528 Presented: 300 Present mean us: 9195 Present max us: 18454 
+FPS: 0.00 Packets: 7180 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 300 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2528 Presented: 300 Present mean us: 9195 Present max us: 18454 
+FPS: 0.00 Packets: 7180 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 300 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2528 Presented: 300 Present mean us: 9195 Present max us: 18454 
+FPS: 0.00 Packets: 7180 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 300 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2528 Presented: 300 Present mean us: 9195 Present max us: 18454 
+RSS KiB: samples=55 min=41048 max=45524 first=41048 last=45524
