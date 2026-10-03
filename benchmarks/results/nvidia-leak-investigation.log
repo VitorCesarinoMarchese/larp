@@ -1,0 +1,377 @@
+Privacy: machine aliases, private IP addresses, and local home paths are replaced with documentation placeholders where present.
+2026-09-14: NVIDIA 615.71.09, GTX 1660 Ti, glibc 2.44, FFmpeg 9.0.1
+Commands and interpretation: docs/nvidia-leak-investigation.md
+
+--- larp-profile-matrix.log ---
+PROFILE CASE: original
+cuInit: 0
+
+=================================================================
+==257880==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb2f9b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bb2ef10caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bb2ef135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #7 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #8 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb2f9b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bb2ef10cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bb2ef135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #7 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #8 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb2f9b2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bb2ef28bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bb2ef10cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bb2ef135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #8 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #10 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb2f9b2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bb2ef28ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bb2ef28bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bb2ef10cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bb2ef135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bb2ef1362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7bb2ef174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7bb2ef1739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x558ade2d13b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #9 0x7fb2f8a27780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #10 0x7fb2f8a278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #11 0x558ade2d1164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+SUMMARY: AddressSanitizer: 183 byte(s) leaked in 4 allocation(s).
+PROFILE RESULT: original exit=1
+PROFILE CASE: filtered
+cuInit: 0
+PROFILE RESULT: filtered exit=0
+PROFILE CASE: minimal-duplicate
+cuInit: 0
+
+=================================================================
+==257909==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7f7a3172bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b7a26d0caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b7a26d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #7 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #8 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7f7a3172bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b7a26d0cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b7a26d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #7 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #8 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7f7a3172c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b7a26e8bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b7a26d0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b7a26d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #8 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #9 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #10 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7f7a3172c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b7a26e8ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b7a26e8bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b7a26d0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b7a26d35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b7a26d362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7b7a26d74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7b7a26d739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x5651ade503b7 in main /path/to/larp/benchmarks/cuda_init.cpp:18
+    #9 0x7f7a30627780  (/usr/lib/libc.so.6+0x27780) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #10 0x7f7a306278b8 in __libc_start_main (/usr/lib/libc.so.6+0x278b8) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #11 0x5651ade50164 in _start (/path/to/larp/build-sanitize/larp-cuda-init+0x4164) (BuildId: 94022621a0c2072169933e1a0aa4a18f38a959ce)
+
+SUMMARY: AddressSanitizer: 183 byte(s) leaked in 4 allocation(s).
+PROFILE RESULT: minimal-duplicate exit=1
+PROFILE CASE: renamed
+cuInit: 0
+PROFILE RESULT: renamed exit=0
+
+--- larp-final-hold-1.log ---
+Opened and closed NVENC sessions: 1
+
+=================================================================
+==258180==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff2c2b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bf2a4f0caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bf2a4f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bf2a4f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bf2a4f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bf2a4f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7ff2c0e777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff2c2b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7ff2bf695b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7ff2b245b386  (<unknown module>)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff2c2b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7ff2bf695b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7bf2ab89f0d6  (<unknown module>)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff2c2b2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bf2a4f0cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bf2a4f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bf2a4f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bf2a4f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bf2a4f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7ff2c0e777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff2c2b2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bf2a508bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bf2a4f0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bf2a4f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bf2a4f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bf2a4f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7bf2a4f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7ff2c0e777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff2c2b2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bf2a508ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bf2a508bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bf2a4f0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bf2a4f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bf2a4f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7bf2a4f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7bf2a4f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x7ff2c0e777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+SUMMARY: AddressSanitizer: 279 byte(s) leaked in 6 allocation(s).
+
+--- larp-final-hold-10.log ---
+Opened and closed NVENC sessions: 10
+
+=================================================================
+==258209==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa45712bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7ba43950caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7ba439535746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7ba4395362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7ba439574859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7ba4395739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7fa4554777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa45712bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7fa453c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7fa446e93386  (<unknown module>)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa45712bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7fa453c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7ba43fe9f0d6  (<unknown module>)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa45712bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7ba43950cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7ba439535746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7ba4395362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7ba439574859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7ba4395739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7fa4554777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa45712c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7ba43968bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7ba43950cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7ba439535746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7ba4395362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7ba439574859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7ba4395739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7fa4554777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa45712c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7ba43968ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7ba43968bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7ba43950cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7ba439535746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7ba4395362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7ba439574859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7ba4395739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x7fa4554777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+SUMMARY: AddressSanitizer: 279 byte(s) leaked in 6 allocation(s).
+
+--- larp-final-drain-1.log ---
+Opened and closed NVENC sessions: 1
+
+=================================================================
+==258341==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7fce5ff2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bce43f0caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bce43f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bce43f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bce43f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bce43f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7fce5e2777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7fce5ff2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7fce5ca95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7fce4d45f386  (<unknown module>)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7fce5ff2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7fce5ca95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7bce4209f0d6  (<unknown module>)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7fce5ff2bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bce43f0cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bce43f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bce43f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bce43f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bce43f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7fce5e2777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7fce5ff2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bce4408bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bce43f0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bce43f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bce43f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bce43f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7bce43f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7fce5e2777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7fce5ff2c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7bce4408ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7bce4408bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7bce43f0cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7bce43f35746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7bce43f362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7bce43f74859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7bce43f739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x7fce5e2777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+SUMMARY: AddressSanitizer: 279 byte(s) leaked in 6 allocation(s).
+
+--- larp-final-drain-10.log ---
+Opened and closed NVENC sessions: 10
+
+=================================================================
+==258358==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 480 byte(s) in 10 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7f4e01c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7f4df4a1c386  (<unknown module>)
+
+Direct leak of 144 byte(s) in 3 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7f4e01c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7b4dcce9f0d6  (<unknown module>)
+
+Direct leak of 96 byte(s) in 2 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7f4e01c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7b4ddbe9f0d6  (<unknown module>)
+
+Direct leak of 96 byte(s) in 2 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7f4e01c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7b4dd169f0d6  (<unknown module>)
+
+Direct leak of 96 byte(s) in 2 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7f4e01c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7b4dcae9f0d6  (<unknown module>)
+
+Direct leak of 56 byte(s) in 1 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b4de910caea  (/usr/lib/../lib/libcuda.so.1+0x30caea) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b4de9135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b4de91362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b4de9174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b4de91739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7f4e034777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7f4e01c95b67 in pthread_cond_broadcast (/usr/lib/libc.so.6+0x95b67) (BuildId: 503200d7fda94a5dc6058d7e0694e5d1dcb2e372)
+    #2 0x7b4de729f0d6  (<unknown module>)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x7f4e0512bea9 in calloc (/usr/lib/libasan.so.8+0x12bea9) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b4de910cb05  (/usr/lib/../lib/libcuda.so.1+0x30cb05) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b4de9135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b4de91362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b4de9174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b4de91739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7f4e034777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 22 byte(s) in 1 object(s) allocated from:
+    #0 0x7f4e0512c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b4de928bc60  (/usr/lib/../lib/libcuda.so.1+0x48bc60) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b4de910cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b4de9135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b4de91362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b4de9174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7b4de91739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7f4e034777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+Indirect leak of 9 byte(s) in 1 object(s) allocated from:
+    #0 0x7f4e0512c0c1 in malloc (/usr/lib/libasan.so.8+0x12c0c1) (BuildId: b8a4241051a1621937fdc46e867ba7ecb56d96ea)
+    #1 0x7b4de928ba50  (/usr/lib/../lib/libcuda.so.1+0x48ba50) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #2 0x7b4de928bd16  (/usr/lib/../lib/libcuda.so.1+0x48bd16) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #3 0x7b4de910cb41  (/usr/lib/../lib/libcuda.so.1+0x30cb41) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #4 0x7b4de9135746  (/usr/lib/../lib/libcuda.so.1+0x335746) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #5 0x7b4de91362bd  (/usr/lib/../lib/libcuda.so.1+0x3362bd) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #6 0x7b4de9174859  (/usr/lib/../lib/libcuda.so.1+0x374859) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #7 0x7b4de91739d9 in cuInit (/usr/lib/../lib/libcuda.so.1+0x3739d9) (BuildId: bc95112d022d2c8bd1a723ed309d4331b21c76bc)
+    #8 0x7f4e034777de  (/usr/lib/libavcodec.so.63+0x777de) (BuildId: 54e1809e40ced7f0c4dcc85f9eb7b685c5fe9c05)
+
+SUMMARY: AddressSanitizer: 1143 byte(s) leaked in 24 allocation(s).

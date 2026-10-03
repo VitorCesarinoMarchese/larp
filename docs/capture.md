@@ -36,13 +36,13 @@ The probe counts captured previews for five seconds after selection and saves th
 On the receiving machine, start a client with its Tailscale address:
 
 ```sh
-./build-release/larp-client --raw 100.118.75.118 5000 120 /tmp/larp-preview.ppm
+./build-release/larp-client --raw 192.0.2.10 5000 120 /tmp/larp-preview.ppm
 ```
 
 On the capture machine, start the host and select a monitor:
 
 ```sh
-./build-release/larp-host --capture 100.118.75.118 5000 30 5
+./build-release/larp-host --capture 192.0.2.10 5000 30 5
 ```
 
 The host runs for 30 seconds after selection and sends at most five previews per second. The client validates the raw-frame header and CRC, then saves the first valid preview as a binary PPM image. Open that image to inspect the captured content. The client does not render a live video window.
@@ -93,13 +93,13 @@ The final interface uses caller-owned preview storage instead of either proposed
 
 Pixel and raw-envelope tests preceded their implementations and initially failed because their headers did not exist. The raw-client test initially failed on the unsupported `--raw` command. The capture-startup test initially failed because the host lacked capture mode. All now pass.
 
-The tests cover padded rows, channel order, downscaling, short buffers, invalid geometry, header validation, an independently computed Python CRC, exact PPM bytes, corrupt pixels, and startup with an unavailable session bus. All ten tests passed in Release and with address, leak, and undefined-behavior sanitizers. A capture-disabled build passed its eight tests locally and on `notept`.
+The tests cover padded rows, channel order, downscaling, short buffers, invalid geometry, header validation, an independently computed Python CRC, exact PPM bytes, corrupt pixels, and startup with an unavailable session bus. All ten tests passed in Release and with address, leak, and undefined-behavior sanitizers. A capture-disabled build passed its eight tests locally and on `receiver-host`.
 
 The real portal handshake was verified separately. Initial probes timed out while the user was away. After monitor selection, a five-second probe produced 211 previews with no malformed buffers. Saved previews from separate runs were inspected and showed the selected desktop with different content.
 
 A subsequent live sanitizer run exposed a 3,677-byte shutdown leak. The `pipewire-context` regression reproduced it without the portal or any video frames: five context create/destroy cycles leaked 18,385 bytes in 170 allocations. Disabling the optional real-time scheduling module for this caller-thread capture context made the same test pass. The fix sets the per-context `module.rt=false` property; it does not change system PipeWire configuration or suppress LeakSanitizer. This milestone does not request real-time thread scheduling.
 
-On September 13, 2026, the sanitized capture host sent 100 raw previews at a target of five FPS over 20 seconds to `notept` at `100.118.75.118`. The remote Release client validated all 100 frames and received all 14,900 packets, with zero dropped frames or corruption. The saved 320×180 PPM image was retrieved and visually inspected. Media traveled over Tailscale. No direct LAN test was used.
+On September 13, 2026, the sanitized capture host sent 100 raw previews at a target of five FPS over 20 seconds to `receiver-host` at `192.0.2.10`. The remote Release client validated all 100 frames and received all 14,900 packets, with zero dropped frames or corruption. The saved 320×180 PPM image was retrieved and visually inspected. Media traveled over Tailscale. No direct LAN test was used.
 
 The host emitted no sanitizer diagnostics. Host RSS after a two-second capture warmup ranged from 68,396 to 68,400 KiB across 90 samples at 200 ms intervals. First RSS was 68,396 KiB and last RSS was 68,400 KiB. This one-page variation is a measurement of an instrumented run, not a Release-memory baseline or a general leak-freedom claim. Receiver RSS was not sampled in this run.
 

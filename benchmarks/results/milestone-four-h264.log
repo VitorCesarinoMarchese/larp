@@ -1,0 +1,62 @@
+Privacy: machine aliases, private IP addresses, and local home paths are replaced with documentation placeholders where present.
+Milestone 4, 2026-09-13
+Local FFmpeg pkg-config: libavcodec 63.1.101, libavutil 61.1.101, libswscale 10.1.101
+Remote receiver-host uses the same versions. Receiver build: /tmp/larp-m4.PehrSv/build
+
+TDD red evidence:
+  h264-test: fatal error: codec/h264.hpp: No such file or directory
+  h264_client.py: AssertionError, old client usage rejects --h264
+  h264-test parameter-set regression: !decoder.decode(dependent_access_unit, output) failed
+Green evidence:
+  Release CTest: 13/13 passed
+  ASAN_OPTIONS=detect_leaks=1 sanitizer CTest: 13/13 passed
+  receiver-host Release LARP_CAPTURE=OFF CTest: 11/11 passed
+  h264-loss includes independent ffmpeg command-line decode and pixel validation
+
+Initial Tailscale synthetic run, before stricter SPS/PPS validation:
+  larp-host --h264-synthetic 192.0.2.10 5044 900 30
+  Encoded: 900 Packets: 21580 Bytes: 24836071 Encode mean us: 1855
+  Host RSS KiB: samples=140 min=25980 max=25980 first=25980 last=25980
+  Receiver: Validated: 898 Corrupt: 0 Dropped: 2 Missing: 5 Expired: 2
+  Receiver Decode mean us: 3017
+  Receiver RSS KiB: samples=190 min=30608 max=30608 first=30608 last=30608
+
+Final sanitizer synthetic run, overlapping the first capture test:
+  ASAN_OPTIONS=detect_leaks=1 larp-host --h264-synthetic 192.0.2.10 5045 1800 30
+  Encoded: 1800 Packets: 43180 Bytes: 49696202 Encode mean us: 3241
+  Host RSS KiB: samples=290 min=49996 max=107544 first=49996 last=107544
+  Receiver: Packets: 42576 Validated: 1583 Corrupt: 0 Dropped: 217 Missing: 682
+  Receiver: Expired: 15 Superseded: 202 Stale: 78 Decode mean us: 3055
+  Receiver RSS KiB: samples=339 min=30572 max=30612 first=30612 last=30572
+
+Sanitizer capture, overlapping synthetic stream:
+  ASAN_OPTIONS=detect_leaks=1 larp-host --h264 192.0.2.10 5046 20 10
+  Captured: 200 Packets: 3178 Superseded: 0 Malformed: 0 Timeouts: 0 Bytes: 3562224 Encode mean us: 2264
+  Host RSS KiB: samples=98 min=87884 max=93136 first=87884 last=93136
+  Receiver: Validated: 149 Corrupt: 0 Dropped: 51 Missing: 107 Expired: 21 Superseded: 30
+  Remote PPM retrieved and visually inspected, 320x180 RGB, 172815 bytes including PPM header
+  Both sanitizer hosts exited 0, no ASan, LSan, or UBSan diagnostics
+
+Release capture-only Tailscale transfer:
+  larp-host --h264 192.0.2.10 5047 30 10
+  larp-client --h264 192.0.2.10 5047 90 /tmp/larp-m4.PehrSv/capture-only.ppm
+  Captured: 300 Packets: 4600 Superseded: 0 Malformed: 0 Timeouts: 0 Bytes: 5194570 Encode mean us: 1355
+  Host RSS KiB: samples=155 min=22848 max=61880 first=22848 last=61880
+  Receiver: Packets: 4600 Observed packet loss: 1.07% Frame loss: 2.67%
+  Receiver: Dropped: 8 Missing: 49 Expired: 8 Superseded: 0 Shutdown: 0 Skipped: 0
+  Receiver: Validated: 292 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 49 Foreign: 0 Decode mean us: 2616
+  Receiver RSS KiB: samples=439 min=33608 max=36404 first=33608 last=36236
+  Capture sampling includes chooser and initialization. These ranges are not steady-state measurements.
+
+Memory investigation, python3 benchmarks/rss.py BUILD/larp-codec-bench 15000:
+  Release: Frames: 15000 Bytes: 414368376 Encode mean us: 797 Decode mean us: 802
+  Release RSS KiB: samples=117 min=30144 max=30356 first=30188 last=30356
+  ASAN_OPTIONS=detect_leaks=1
+  Frames: 15000 Bytes: 414368376 Encode mean us: 1553 Decode mean us: 2535
+  RSS KiB: samples=523 min=146336 max=329360 first=146336 last=311772
+  ASAN_OPTIONS=detect_leaks=1:quarantine_size_mb=0:thread_local_quarantine_size_kb=0
+  Frames: 15000 Bytes: 414368376 Encode mean us: 1540 Decode mean us: 2512
+  RSS KiB: samples=520 min=48032 max=50360 first=49204 last=48032
+  All three runs exited 0. Both sanitizer runs had no ASan, LSan, or UBSan diagnostics.
+  Default quarantine RSS leveled off; disabling quarantine removed large growth.
+  Jobs ran concurrently. Processing times are not isolated CPU benchmark comparisons.
