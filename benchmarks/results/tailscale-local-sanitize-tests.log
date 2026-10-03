@@ -1,0 +1,55 @@
+Test project /home/tept/larp/build-resume-sanitize
+      Start  1: h264
+ 1/25 Test  #1: h264 .............................   Passed    0.95 sec
+      Start  2: protocol
+ 2/25 Test  #2: protocol .........................   Passed    0.03 sec
+      Start  3: reassembly
+ 3/25 Test  #3: reassembly .......................   Passed    0.28 sec
+      Start  4: udp
+ 4/25 Test  #4: udp ..............................   Passed    0.01 sec
+      Start  5: render
+ 5/25 Test  #5: render ...........................   Passed    0.05 sec
+      Start  6: view-client
+ 6/25 Test  #6: view-client ......................   Passed    2.24 sec
+      Start  7: view-recovery
+ 7/25 Test  #7: view-recovery ....................   Passed    3.39 sec
+      Start  8: codec-options
+ 8/25 Test  #8: codec-options ....................   Passed    0.30 sec
+      Start  9: h264-loss
+ 9/25 Test  #9: h264-loss ........................   Passed    2.43 sec
+      Start 10: h264-client
+10/25 Test #10: h264-client ......................   Passed    3.10 sec
+      Start 11: integration
+11/25 Test #11: integration ......................   Passed    4.24 sec
+      Start 12: loss
+12/25 Test #12: loss .............................   Passed    0.02 sec
+      Start 13: pixels
+13/25 Test #13: pixels ...........................   Passed    0.01 sec
+      Start 14: raw-frame
+14/25 Test #14: raw-frame ........................   Passed    0.01 sec
+      Start 15: raw-client
+15/25 Test #15: raw-client .......................   Passed    1.08 sec
+      Start 16: capture-startup
+16/25 Test #16: capture-startup ..................   Passed    0.11 sec
+      Start 17: pipewire-context
+17/25 Test #17: pipewire-context .................   Passed    0.02 sec
+      Start 18: rate-control
+18/25 Test #18: rate-control .....................   Passed    0.01 sec
+      Start 19: bitrate
+19/25 Test #19: bitrate ..........................   Passed    1.08 sec
+      Start 20: adaptive
+20/25 Test #20: adaptive .........................   Passed   11.10 sec
+      Start 21: feedback-client
+21/25 Test #21: feedback-client ..................   Passed    2.09 sec
+      Start 22: pacing
+22/25 Test #22: pacing ...........................   Passed    0.03 sec
+      Start 23: bandwidth-model
+23/25 Test #23: bandwidth-model ..................   Passed    0.07 sec
+      Start 24: bandwidth
+24/25 Test #24: bandwidth ........................   Passed   21.10 sec
+      Start 25: adaptive-low-fps
+25/25 Test #25: adaptive-low-fps .................   Passed    3.08 sec
+
+100% tests passed out of 25
+
+Total Test time (real) =  56.83 sec

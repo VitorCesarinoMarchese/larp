@@ -3,7 +3,9 @@
 #include "common/runtime.hpp"
 #include "media/raw_frame.hpp"
 #include "platform/udp.hpp"
+#include "protocol/feedback.hpp"
 #include "transport/reassembly.hpp"
+#include "transport/session.hpp"
 #ifdef LARP_RENDER
 #include "render/window.hpp"
 #endif
@@ -14,6 +16,7 @@
 #include <vector>
 int main(int argc, char **argv) {
     try {
+        const auto network = larp::take_network_options(argc, argv, larp::SessionRole::receiver);
         const std::string_view mode = argc > 1 ? argv[1] : "";
         const bool view_mode = mode == "--view-h264" || mode == "--view-raw";
         const bool h264_mode = mode == "--h264" || mode == "--view-h264";
@@ -26,7 +29,8 @@ int main(int argc, char **argv) {
                          "       larp-client --raw|--h264 BIND_IPv4 PORT SECONDS OUTPUT.ppm "
                          "[FRAME_TIMEOUT_MS] [--codec software|nvidia]\n"
                          "       larp-client --view-raw|--view-h264 BIND_IPv4 PORT SECONDS "
-                         "[FRAME_TIMEOUT_MS] [--codec software|nvidia]\n";
+                         "[FRAME_TIMEOUT_MS] [--codec software|nvidia]\n"
+                         "       Secure modes also require --key-file PATH --peer IPv4\n";
             return 1;
         }
         using namespace larp;
@@ -41,7 +45,8 @@ int main(int argc, char **argv) {
         if (view_mode)
             throw std::runtime_error("live preview requires a build with LARP_RENDER=ON");
 #endif
-        UdpSocket socket(local);
+        SessionSocket socket(local, SessionRole::receiver, network);
+        std::uint64_t generation = 0;
         Reassembler reassembly{std::chrono::milliseconds(timeout_ms)};
         auto decoder = h264_mode ? std::make_unique<H264Decoder>(backend) : nullptr;
         std::vector<std::byte> decoded(h264_mode ? 320 * 180 * 3 : 0);
@@ -51,6 +56,7 @@ int main(int argc, char **argv) {
         std::array<std::byte, datagram_size> wire{};
         std::uint64_t packets = 0, bytes = 0, valid = 0, corrupt = 0, foreign = 0;
         std::uint64_t previous_valid = 0, previous_bytes = 0;
+        std::uint64_t feedback_time = 0;
         const auto start = now_us();
         auto report_time = start;
         auto report = [&](std::uint64_t now) {
@@ -81,6 +87,10 @@ int main(int argc, char **argv) {
                 std::cout << " Presented: " << presented
                           << " Present mean us: " << (presented ? present_us / presented : 0)
                           << " Present max us: " << present_max_us;
+            if (socket.secured())
+                std::cout << " Sessions: " << socket.generation()
+                          << " Security rejected: " << socket.rejected()
+                          << " Unsent: " << socket.unsent();
             std::cout << " \n" << std::flush;
             report_time = now;
             previous_valid = valid;
@@ -97,9 +107,32 @@ int main(int argc, char **argv) {
                 break;
 #endif
             const auto received = socket.receive(wire, static_cast<int>(std::min(timeout_ms, 10U)));
+            if (socket.generation() != generation) {
+                if (generation && decoder)
+                    decoder = std::make_unique<H264Decoder>(backend);
+                generation = socket.generation();
+                reassembly.reset_session();
+                peer.reset();
+                feedback_time = 0;
+            }
             const auto now = now_us();
             reassembly.expire(now);
-            if (received.status != ReceiveStatus::timeout) {
+            bool control_packet = false;
+            if (received.status == ReceiveStatus::packet &&
+                is_feedback(std::span(wire).first(received.size))) {
+                control_packet = true;
+                const auto probe = decode_probe(std::span(wire).first(received.size));
+                if (h264_mode && peer && received.peer == *peer && probe &&
+                    now - feedback_time >= 100000) {
+                    const auto &s = reassembly.stats;
+                    socket.send(*peer, encode_feedback({*probe,
+                                                        now,
+                                                        {s.expected, s.missing, s.completed,
+                                                         s.dropped, s.skipped, corrupt, bytes}}));
+                    feedback_time = now;
+                }
+            }
+            if (!control_packet && received.status != ReceiveStatus::timeout) {
                 if (peer && received.peer != *peer)
                     ++foreign;
                 else {

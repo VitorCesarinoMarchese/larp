@@ -1,0 +1,5 @@
+Listening: 35578
+FPS: 3.99 Packets: 161 Observed packet loss: 0.62% Frame loss: 28.57% Dropped: 1 frames Missing: 1 Expired: 1 Superseded: 0 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 1.51 Mbps Validated: 4 Corrupt: 1 Invalid: 0 Duplicates: 1 Stale: 1 Foreign: 1 Decode mean us: 5822 Presented: 4 Present mean us: 12597 Present max us: 15250 
+FPS: 0.00 Packets: 161 Observed packet loss: 0.62% Frame loss: 28.57% Dropped: 1 frames Missing: 1 Expired: 1 Superseded: 0 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 0.00 Mbps Validated: 4 Corrupt: 1 Invalid: 0 Duplicates: 1 Stale: 1 Foreign: 1 Decode mean us: 5822 Presented: 4 Present mean us: 12597 Present max us: 15250 
+FPS: 0.00 Packets: 161 Observed packet loss: 0.62% Frame loss: 28.57% Dropped: 1 frames Missing: 1 Expired: 1 Superseded: 0 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 0.00 Mbps Validated: 4 Corrupt: 1 Invalid: 0 Duplicates: 1 Stale: 1 Foreign: 1 Decode mean us: 5822 Presented: 4 Present mean us: 12597 Present max us: 15250 
+PASS: live preview recovered after loss, expiry, corruption, and sender pause

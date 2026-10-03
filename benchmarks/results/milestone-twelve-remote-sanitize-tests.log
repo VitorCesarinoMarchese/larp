@@ -1,0 +1,47 @@
+Test project /tmp/larp-session-acceptance.tUrTt5/build-sanitize
+      Start  1: h264
+ 1/21 Test  #1: h264 .............................   Passed    2.10 sec
+      Start  5: protocol
+ 2/21 Test  #5: protocol .........................   Passed    0.06 sec
+      Start  6: reassembly
+ 3/21 Test  #6: reassembly .......................   Passed    0.53 sec
+      Start  7: udp
+ 4/21 Test  #7: udp ..............................   Passed    0.02 sec
+      Start  8: codec-options
+ 5/21 Test  #8: codec-options ....................   Passed    0.61 sec
+      Start  9: h264-loss
+ 6/21 Test  #9: h264-loss ........................   Passed    2.60 sec
+      Start 10: h264-client
+ 7/21 Test #10: h264-client ......................   Passed    3.13 sec
+      Start 13: integration
+ 8/21 Test #13: integration ......................   Passed    4.42 sec
+      Start 14: loss
+ 9/21 Test #14: loss .............................   Passed    0.03 sec
+      Start 15: pixels
+10/21 Test #15: pixels ...........................   Passed    0.01 sec
+      Start 16: raw-frame
+11/21 Test #16: raw-frame ........................   Passed    0.01 sec
+      Start 17: raw-client
+12/21 Test #17: raw-client .......................   Passed    1.15 sec
+      Start 18: rate-control
+13/21 Test #18: rate-control .....................   Passed    0.01 sec
+      Start 19: bitrate
+14/21 Test #19: bitrate ..........................   Passed    1.63 sec
+      Start 20: adaptive
+15/21 Test #20: adaptive .........................   Passed   11.19 sec
+      Start 21: feedback-client
+16/21 Test #21: feedback-client ..................   Passed    2.13 sec
+      Start 22: pacing
+17/21 Test #22: pacing ...........................   Passed    0.05 sec
+      Start 23: bandwidth-model
+18/21 Test #23: bandwidth-model ..................   Passed    0.11 sec
+      Start 24: bandwidth
+19/21 Test #24: bandwidth ........................   Passed   21.22 sec
+      Start 25: adaptive-low-fps
+20/21 Test #25: adaptive-low-fps .................   Passed    3.12 sec
+      Start 26: secure-sessions
+21/21 Test #26: secure-sessions ..................   Passed   33.17 sec
+
+100% tests passed out of 21
+
+Total Test time (real) =  87.34 sec

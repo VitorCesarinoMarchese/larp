@@ -1,4 +1,5 @@
 #include "codec/h264.hpp"
+#include "common/bitrate.hpp"
 #include "media/raw_frame.hpp"
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -133,10 +134,15 @@ struct H264Encoder::Impl {
     std::uint32_t width, height;
     CodecBackend backend;
     std::int64_t pts = 0;
-    Impl(std::uint32_t w, std::uint32_t h, unsigned fps, CodecBackend selected)
+    Impl(std::uint32_t w, std::uint32_t h, unsigned fps, CodecBackend selected,
+         std::uint32_t bitrate)
         : width(w), height(h), backend(selected) {
         if (!dimensions(w, h) || fps < 1 || fps > 30)
             throw std::invalid_argument("H.264 requires 2..320 x 2..180 RGB pixels and 1..30 FPS");
+        if (bitrate &&
+            (backend != CodecBackend::software || bitrate < min_bitrate || bitrate > max_bitrate))
+            throw std::invalid_argument(
+                "adaptive bitrate requires software encoding at 128..8000 kbps");
         const auto *codec = avcodec_find_encoder_by_name(
             backend == CodecBackend::nvidia ? "h264_nvenc" : "libx264");
         ctx = context(codec);
@@ -162,7 +168,12 @@ struct H264Encoder::Impl {
         } else {
             check(av_opt_set(ctx->priv_data, "preset", "ultrafast", 0));
             check(av_opt_set(ctx->priv_data, "tune", "zerolatency", 0));
-            check(av_opt_set(ctx->priv_data, "crf", "23", 0));
+            if (bitrate) {
+                ctx->bit_rate = bitrate;
+                ctx->rc_max_rate = bitrate;
+                ctx->rc_buffer_size = static_cast<int>(bitrate / fps);
+            } else
+                check(av_opt_set(ctx->priv_data, "crf", "23", 0));
             check(av_opt_set(ctx->priv_data, "x264-params",
                              "repeat-headers=1:annexb=1:keyint=1:threads=1", 0));
         }
@@ -178,9 +189,19 @@ struct H264Encoder::Impl {
             throw std::runtime_error("cannot create RGB conversion");
     }
 };
-H264Encoder::H264Encoder(std::uint32_t w, std::uint32_t h, unsigned fps, CodecBackend backend)
-    : impl_(std::make_unique<Impl>(w, h, fps, backend)) {}
+H264Encoder::H264Encoder(std::uint32_t w, std::uint32_t h, unsigned fps, CodecBackend backend,
+                         std::uint32_t bitrate)
+    : impl_(std::make_unique<Impl>(w, h, fps, backend, bitrate)) {}
 H264Encoder::~H264Encoder() = default;
+void H264Encoder::set_bitrate(std::uint32_t bitrate) {
+    auto &s = *impl_;
+    if (s.backend != CodecBackend::software || !s.ctx->rc_max_rate || bitrate < min_bitrate ||
+        bitrate > max_bitrate)
+        throw std::invalid_argument("bitrate changes require an adaptive software encoder");
+    s.ctx->bit_rate = bitrate;
+    s.ctx->rc_max_rate = bitrate;
+    s.ctx->rc_buffer_size = static_cast<int>(bitrate / static_cast<unsigned>(s.ctx->framerate.num));
+}
 std::string_view H264Encoder::name() const {
     return impl_->ctx->codec->name;
 }

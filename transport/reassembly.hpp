@@ -68,6 +68,10 @@ class Reassembler {
     void finish() {
         drop(DropReason::shutdown);
     }
+    void reset_session() {
+        drop(DropReason::superseded);
+        have_id_ = false;
+    }
     std::optional<std::span<const std::byte>> accept(std::span<const std::byte> packet,
                                                      std::uint64_t now) {
         expire(now);

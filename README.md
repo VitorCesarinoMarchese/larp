@@ -1,6 +1,6 @@
 # L.A.R.P.
 
-Low-latency Adaptive Remote Protocol. Milestones 1 through 4 transport synthetic frames and PipeWire screen previews over UDP on Linux, encode and decode H.264 in software, and report loss and stale-frame drops.
+Low-latency Adaptive Remote Protocol. Transports synthetic frames and PipeWire screen previews over UDP on Linux, encodes and decodes H.264 in software, presents live video, and adapts bitrate using receiver feedback.
 
 ## Milestone status
 
@@ -9,25 +9,39 @@ Low-latency Adaptive Remote Protocol. Milestones 1 through 4 transport synthetic
 - [x] Milestone 3: Linux PipeWire screen capture
 - [x] Milestone 4: H.264 software encoding and decoding
 - [ ] Milestone 5: NVENC and NVDEC acceleration
-- [ ] Milestone 6: low-latency Linux rendering
-- [ ] Milestone 7: network telemetry and adaptive bitrate
+- [x] Milestone 6: low-latency Linux rendering
+- [x] Milestone 7: network telemetry and adaptive bitrate
 - [ ] Milestone 8: Windows capture abstraction
 - [ ] Milestone 9: Windows hardware encoding and decoding
 - [ ] Milestone 10: Windows rendering and Winsock transport
 - [ ] Milestone 11: Linux and Windows interoperability
-- [ ] Milestone 12: internet transport, NAT traversal, and broader networking work
+- [x] Milestone 12: Tailscale session security and network recovery
 
 Milestone 5's NVIDIA backends are implemented and pass functional tests. Acceptance remains blocked by driver leaks reproduced outside L.A.R.P. See [the NVIDIA guide](docs/nvidia.md) for evidence and reproduction commands.
 
-Milestone 6's live Linux preview is implemented and verified locally with the
-software codec. Two-machine Tailscale acceptance is pending. See
+Milestone 6's live Linux preview passes local and two-machine Tailscale
+verification with the software codec. See
 [the rendering guide](docs/rendering.md) for commands and measurements.
 
-Each completed milestone has implementation notes and measurements in [`docs/`](docs/). Development stops for review at the end of each milestone.
+Milestone 7's software adaptive bitrate and receiver feedback pass local and
+two-machine Tailscale loss, delay, outage, and live-capture checks. See
+[the adaptive streaming guide](docs/adaptive.md).
+
+Windows milestones 8 through 11 remain unimplemented and are deferred until a
+Windows test machine is available. Milestone 12 keeps Tailscale for internet
+transport and adds authenticated sessions and recovery. See
+[the session guide](docs/sessions.md). Direct NAT traversal and a separate relay
+are outside its current scope.
+
+Milestone 12 passes local negative and recovery tests, sanitizer checks on both
+Linux nodes, and encrypted Tailscale streaming with sender and receiver
+restarts in both directions. See [the acceptance results](docs/session-verification.md).
+
+Each completed milestone has implementation notes and measurements in [`docs/`](docs/).
 
 ## Build and test
 
-Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration tests and RSS benchmarks. All builds require the FFmpeg `libavcodec`, `libavutil`, and `libswscale` development libraries. Software encoding requires FFmpeg with `libx264`. Capture-enabled builds also require the PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` to build the transport, software codec, and receiver without desktop capture.
+Use a C++23 compiler and CMake 3.25 or newer. Python 3 enables the subprocess integration tests and RSS benchmarks. All builds require libsodium 1.0.18 or newer and the FFmpeg `libavcodec`, `libavutil`, and `libswscale` development libraries. Software encoding requires FFmpeg with `libx264`. Capture-enabled builds also require the PipeWire and GIO Unix development libraries. Use `-DLARP_CAPTURE=OFF` to build the transport, software codec, and receiver without desktop capture.
 
 Live preview builds require SDL3 3.2 or newer. Use `-DLARP_RENDER=OFF` to omit
 SDL3 and the window. Live windows use X11 or Xwayland; snapshot modes remain
@@ -70,7 +84,10 @@ The host sends 600 frames of 16,384 bytes at 60 FPS. The client runs for 12 seco
 
 For two Linux machines, use Tailscale. Build on both machines, bind the client to its Tailscale IPv4 address, and give the host that address. Use the same frame count, byte count, and FPS as above, then compare the host's sent count with the client's final validated count. Network acceptance tests currently use only Tailscale. Local automated tests use loopback.
 
-Restart the client before each host session. The client pins the first valid source IP and UDP port. This prototype has no session negotiation.
+These commands use the original plaintext mode, which pins the first valid
+source IP and UDP port and requires a new client for each host session.
+For authenticated encryption and automatic restart recovery, use
+[`--key-file` and `--peer`](docs/sessions.md).
 
 ## Measure a transfer
 
@@ -108,3 +125,11 @@ The milestone-three capture and raw-preview commands are described in [the captu
 ## Software H.264 preview
 
 The `--h264` host and client modes encode and decode screen previews with FFmpeg. The client saves a decoded snapshot and reports processing times. See [the software H.264 guide](docs/software-h264.md) for commands, memory limits, recovery behavior, and verified Tailscale results.
+
+## Adaptive software streaming
+
+Add `--adaptive 2000` to an H.264 host command to start at 2,000 kbps. The
+sender reports receiver loss, throughput, application RTT, and bitrate changes.
+The existing H.264 clients reply automatically. Adaptive mode currently requires
+the software encoder. See [usage and local verification](docs/adaptive.md), and
+[bandwidth changes and packet pacing](docs/bandwidth.md).

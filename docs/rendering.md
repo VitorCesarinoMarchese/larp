@@ -1,8 +1,8 @@
 # Live Linux preview
 
 Milestone 6 adds a resizable window for received raw RGB and H.264 video.
-Local implementation and verification are complete. Two-machine Tailscale
-acceptance is pending. Milestone 5's NVIDIA leak blocker remains separate.
+Local and two-machine Tailscale verification are complete with the software
+codec. Milestone 5's NVIDIA leak blocker remains separate.
 
 ## Run a preview
 
@@ -136,3 +136,97 @@ python3 benchmarks/render.py build-release --frames 900 --fps 30 \
 Replace the documentation placeholders with the actual receiver Tailscale IP,
 sender SSH alias, and sender build path. The benchmark waits for receiver
 readiness and requires every requested frame to be presented without corruption.
+
+## Intel laptop recheck on 2026-09-24
+
+Resumed from `09fe19e` on an Intel Iris Xe laptop. All 16 software tests passed
+in Release and under ASan, LSan, and UBSan. The five optional NVIDIA tests
+failed because this machine has no CUDA driver or NVIDIA GPU; this run does
+not recheck the earlier NVIDIA leak findings. Keep `LARP_TEST_NVIDIA=OFF` on
+this machine.
+
+A 300-frame, 30 FPS live loopback run overlapped with the test suites and
+presented 294 frames with zero corrupt frames. It reported five incomplete
+frames and one entirely skipped frame. Its maximum presentation call took
+57,063 microseconds. The benchmark correctly failed its all-frames check.
+
+Repeating the same command after the suites finished presented all 300 frames
+with zero loss or corruption. Mean decode time was 2,528 microseconds; mean
+presentation time was 9,195 microseconds, with a maximum of 18,454 microseconds.
+Receiver RSS ranged from 41,048 to 45,524 KiB over 55 samples. This short run
+does not establish constant memory use or performance under contention.
+
+```sh
+cmake -S . -B build-resume -DCMAKE_BUILD_TYPE=Release -DLARP_TEST_NVIDIA=OFF
+cmake --build build-resume -j2
+ctest --test-dir build-resume --output-on-failure
+python3 benchmarks/render.py build-resume --frames 300 --fps 30
+```
+
+Both the [concurrent-test run](../benchmarks/results/milestone-six-intel-loaded.log)
+and [isolated run](../benchmarks/results/milestone-six-intel-isolated.log) are
+preserved. At the time of these September measurements, no second machine was
+available and network acceptance was pending. The October 3 two-machine checks
+below complete milestone 6's acceptance.
+
+## Verify recovery on one machine
+
+The `view-recovery` CTest case runs the production software encoder, then
+replays its UDP fragments into the live receiver with controlled impairments.
+It uses SDL's dummy display by default. To run the same case in a desktop
+window, use:
+
+```sh
+python3 tests/view_recovery.py build-resume --desktop
+ASAN_OPTIONS=detect_leaks=1 python3 tests/view_recovery.py build-resume-sanitize --desktop
+```
+
+The sequence reorders and duplicates fragments, withholds one fragment past
+the receiver's 50 ms deadline, loses a whole frame, corrupts encoded video,
+sends a newer frame from an unrelated endpoint, and resumes after a sender
+pause. Exact final counters must show four validated and presented frames,
+one corrupt frame, one expiry, one missing fragment, one skipped frame, one
+duplicate, one stale fragment, and one foreign packet. This also checks that
+those failures do not prevent later independent H.264 frames from appearing.
+
+On 2026-09-24, the desktop case passed under ASan, LSan, and UBSan with no
+sanitizer diagnostics. The [desktop recovery log](../benchmarks/results/milestone-six-recovery-sanitize.log)
+records the counters. This test verifies application recovery over loopback;
+it does not simulate a bandwidth bottleneck, measure display scanout, or
+replace the separate two-machine Tailscale test recorded below.
+
+## Two-machine Tailscale acceptance on 2026-10-03
+
+A second Linux machine sent 900 software H.264 frames at 30 FPS over Tailscale
+to the local desktop receiver. All 900 frames decoded and were presented,
+with zero loss, corruption, or invalid packets. Mean decode time was 2,571 us,
+mean presentation time was 7,585 us, and maximum presentation time was
+10,776 us. Receiver RSS remained at 40,984 KiB across 190 samples after warmup.
+The [Release log](../benchmarks/results/milestone-six-tailscale-release.log)
+contains the full counters and RSS measurements.
+
+All 25 local tests also passed under ASan, LSan, and UBSan with leak detection
+enabled; see the [sanitizer test log](../benchmarks/results/tailscale-local-sanitize-tests.log).
+Two additional 300-frame, 30 FPS Tailscale runs with a sanitized receiver
+failed the benchmark's all-frames check. The
+[first run](../benchmarks/results/milestone-six-tailscale-sanitize-before.log)
+presented 277 frames, with one incomplete frame and missing traffic before
+the first received frame. The
+[repeat](../benchmarks/results/milestone-six-tailscale-sanitize.log)
+presented 294 frames and reported six entirely skipped frames. Both receivers
+exited successfully, with zero corruption and no sanitizer diagnostics.
+The cause of these network losses is not isolated. The successful Release
+acceptance does not guarantee lossless delivery under instrumentation or
+changing network conditions.
+
+```sh
+python3 benchmarks/render.py build-release --frames 900 --fps 30 \
+  --bind RECEIVER_TAILSCALE_IP --remote user@SENDER_TAILSCALE_IP \
+  --remote-build /path/to/sender/build-release
+```
+
+The reverse direction also passed with live PipeWire capture and adaptive
+software H.264. The second machine displayed all 120 captured frames without
+loss or corruption. See the [capture log](../benchmarks/results/milestone-seven-tailscale-capture.log).
+These checks complete milestone 6's network acceptance. CPU presentation
+durations remain distinct from display scanout and glass-to-glass latency.

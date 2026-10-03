@@ -116,3 +116,16 @@ The [new log](../benchmarks/results/nvidia-recheck-2026-09-21.log) records the
 probe and hardware-suite results. A [NVIDIA report draft](nvidia-bug-report.md)
 now includes standalone build commands and expected results. It has not been
 submitted. No system settings, installed driver files, or leak checks changed.
+
+## Locked-screen recheck on 2026-10-03
+
+An isolated build on the second Linux machine uses the same GTX 1660 Ti and
+615.71.09 driver. All five NVIDIA sanitizer tests still fail with leak reports.
+The [hardware log](../benchmarks/results/milestone-five-locked-sanitize.log)
+records the failures with leak detection enabled. The standalone CUDA-only
+probe again reports 183 bytes in four allocations after successful `cuInit(0)`;
+its [log](../benchmarks/results/milestone-five-locked-cuda.log) reproduces the
+failure outside L.A.R.P.'s codec implementation. Encoder tests report the
+existing 279-byte, six-allocation total. No desktop capture, driver changes,
+profile changes, or sanitizer suppressions were used. Milestone 5 remains
+blocked by the vendor lifecycle leaks.

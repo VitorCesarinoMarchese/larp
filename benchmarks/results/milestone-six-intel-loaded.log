@@ -1,0 +1,32 @@
+Window process: 13239
+[libx264 @ 0x556803a11500] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x556803a11500] profile Constrained Baseline, level 1.3, 4:2:0, 8-bit
+Encoder: libx264
+[libx264 @ 0x556803a11500] frame I:300   Avg QP:33.95  size: 27522
+[libx264 @ 0x556803a11500] mb I  I16..4: 100.0%  0.0%  0.0%
+[libx264 @ 0x556803a11500] coded y,uvDC,uvAC intra: 99.7% 99.7% 99.7%
+[libx264 @ 0x556803a11500] i16 v,h,dc,p:  0%  0% 97%  2%
+[libx264 @ 0x556803a11500] i8c dc,h,v,p: 84%  1%  1% 14%
+[libx264 @ 0x556803a11500] kb/s:6605.22
+Encoded: 300 Packets: 7180 Bytes: 8262523 Encode mean us: 2617
+Listening: 51061
+Decoder: h264
+Display: SDL3 CPU surface
+FPS: 27.85 Packets: 652 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.14 Mbps Validated: 28 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2002 Presented: 28 Present mean us: 10504 Present max us: 18546 
+FPS: 29.81 Packets: 1372 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.78 Mbps Validated: 58 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2004 Presented: 58 Present mean us: 11580 Present max us: 18546 
+FPS: 21.85 Packets: 1910 Observed packet loss: 0.78% Frame loss: 1.23% Dropped: 1 frames Missing: 15 Expired: 0 Superseded: 1 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 5.06 Mbps Validated: 80 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2053 Presented: 80 Present mean us: 19348 Present max us: 57063 
+FPS: 28.97 Packets: 2622 Observed packet loss: 1.76% Frame loss: 2.68% Dropped: 3 frames Missing: 47 Expired: 0 Superseded: 3 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.74 Mbps Validated: 109 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1991 Presented: 109 Present mean us: 22835 Present max us: 57063 
+FPS: 36.27 Packets: 3509 Observed packet loss: 1.32% Frame loss: 2.01% Dropped: 3 frames Missing: 47 Expired: 0 Superseded: 3 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 8.24 Mbps Validated: 146 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2063 Presented: 146 Present mean us: 21633 Present max us: 57063 
+FPS: 29.90 Packets: 4229 Observed packet loss: 1.10% Frame loss: 1.68% Dropped: 3 frames Missing: 47 Expired: 0 Superseded: 3 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.80 Mbps Validated: 176 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2133 Presented: 176 Present mean us: 20679 Present max us: 57063 
+FPS: 30.00 Packets: 4949 Observed packet loss: 0.94% Frame loss: 1.44% Dropped: 3 frames Missing: 47 Expired: 0 Superseded: 3 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 206 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2225 Presented: 206 Present mean us: 20140 Present max us: 57063 
+FPS: 29.96 Packets: 5670 Observed packet loss: 0.82% Frame loss: 1.26% Dropped: 3 frames Missing: 47 Expired: 0 Superseded: 3 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.82 Mbps Validated: 236 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2292 Presented: 236 Present mean us: 19757 Present max us: 57063 
+FPS: 26.62 Packets: 6342 Observed packet loss: 0.74% Frame loss: 1.12% Dropped: 3 frames Missing: 47 Expired: 0 Superseded: 3 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 6.06 Mbps Validated: 264 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2253 Presented: 264 Present mean us: 19107 Present max us: 57063 
+FPS: 29.96 Packets: 7093 Observed packet loss: 0.88% Frame loss: 2.00% Dropped: 5 frames Missing: 63 Expired: 0 Superseded: 5 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 7.12 Mbps Validated: 294 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2209 Presented: 294 Present mean us: 20283 Present max us: 57063 
+FPS: 0.00 Packets: 7093 Observed packet loss: 0.88% Frame loss: 2.00% Dropped: 5 frames Missing: 63 Expired: 0 Superseded: 5 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 0.00 Mbps Validated: 294 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2209 Presented: 294 Present mean us: 20283 Present max us: 57063 
+FPS: 0.00 Packets: 7093 Observed packet loss: 0.88% Frame loss: 2.00% Dropped: 5 frames Missing: 63 Expired: 0 Superseded: 5 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 0.00 Mbps Validated: 294 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2209 Presented: 294 Present mean us: 20283 Present max us: 57063 
+FPS: 0.00 Packets: 7093 Observed packet loss: 0.88% Frame loss: 2.00% Dropped: 5 frames Missing: 63 Expired: 0 Superseded: 5 Shutdown: 0 Skipped: 1 RTT: N/A Throughput: 0.00 Mbps Validated: 294 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2209 Presented: 294 Present mean us: 20283 Present max us: 57063 
+RSS KiB: samples=55 min=40980 max=45456 first=40980 last=45456
+Traceback (most recent call last):
+  File "/home/tept/larp/benchmarks/render.py", line 84, in <module>
+    raise RuntimeError('Transfer did not present every frame cleanly')
+RuntimeError: Transfer did not present every frame cleanly

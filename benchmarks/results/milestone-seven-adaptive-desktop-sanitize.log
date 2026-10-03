@@ -1,0 +1,55 @@
+[libx264 @ 0x7d02bede0f80] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x7d02bede0f80] profile Constrained Baseline, level 2.0, 4:2:0, 8-bit
+Encoder: libx264
+Feedback: 1 RTT us: 26550 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.00 Target kbps: 2000 Feedback age ms: 0 Rejected feedback: 2
+Feedback: 2 RTT us: 32240 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 1.52 Target kbps: 2000 Feedback age ms: 0 Rejected feedback: 3
+Feedback: 3 RTT us: 28623 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 1.89 Target kbps: 2000 Feedback age ms: 0 Rejected feedback: 4
+Feedback: 4 RTT us: 23524 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 2.04 Target kbps: 2000 Feedback age ms: 0 Rejected feedback: 5
+Feedback: 5 RTT us: 25999 Packet loss: 3.92% Frame loss: 28.57% Receive Mbps: 1.99 Target kbps: 1500 Feedback age ms: 0 Rejected feedback: 6
+[libx264 @ 0x7d02bede0f80] max bitrate less than average bitrate, assuming CBR
+Feedback: 6 RTT us: 29553 Packet loss: 4.76% Frame loss: 37.50% Receive Mbps: 1.85 Target kbps: 1500 Feedback age ms: 0 Rejected feedback: 7
+Feedback: 7 RTT us: 32657 Packet loss: 4.76% Frame loss: 28.57% Receive Mbps: 1.54 Target kbps: 1125 Feedback age ms: 0 Rejected feedback: 8
+[libx264 @ 0x7d02bede0f80] max bitrate less than average bitrate, assuming CBR
+Feedback: 8 RTT us: 26203 Packet loss: 6.12% Frame loss: 37.50% Receive Mbps: 1.40 Target kbps: 1125 Feedback age ms: 0 Rejected feedback: 9
+Feedback: 9 RTT us: 21684 Packet loss: 6.06% Frame loss: 28.57% Receive Mbps: 1.08 Target kbps: 1125 Feedback age ms: 0 Rejected feedback: 10
+Feedback: 10 RTT us: 34274 Packet loss: 7.69% Frame loss: 33.33% Receive Mbps: 1.08 Target kbps: 843 Feedback age ms: 0 Rejected feedback: 11
+[libx264 @ 0x7d02bede0f80] max bitrate less than average bitrate, assuming CBR
+Feedback: 11 RTT us: 25799 Packet loss: 6.67% Frame loss: 33.33% Receive Mbps: 1.05 Target kbps: 843 Feedback age ms: 0 Rejected feedback: 12
+Feedback: 12 RTT us: 28353 Packet loss: 11.11% Frame loss: 33.33% Receive Mbps: 0.80 Target kbps: 843 Feedback age ms: 0 Rejected feedback: 13
+Feedback: 13 RTT us: 29083 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.84 Target kbps: 843 Feedback age ms: 0 Rejected feedback: 14
+Feedback: 14 RTT us: 25420 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.88 Target kbps: 843 Feedback age ms: 0 Rejected feedback: 15
+Feedback: 15 RTT us: 35440 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.84 Target kbps: 843 Feedback age ms: 0 Rejected feedback: 16
+Feedback: 16 RTT us: 29039 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.87 Target kbps: 907 Feedback age ms: 0 Rejected feedback: 17
+Feedback: 17 RTT us: 34226 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.86 Target kbps: 907 Feedback age ms: 0 Rejected feedback: 18
+Feedback: 18 RTT us: 29341 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.91 Target kbps: 907 Feedback age ms: 0 Rejected feedback: 19
+Feedback: 19 RTT us: 30883 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.98 Target kbps: 907 Feedback age ms: 0 Rejected feedback: 20
+Feedback: 19 RTT us: 30883 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.98 Target kbps: 680 Feedback age ms: 1001 Rejected feedback: 21
+[libx264 @ 0x7d02bede0f80] max bitrate less than average bitrate, assuming CBR
+Feedback: 19 RTT us: 30883 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.98 Target kbps: 510 Feedback age ms: 2003 Rejected feedback: 21
+[libx264 @ 0x7d02bede0f80] max bitrate less than average bitrate, assuming CBR
+Feedback: 20 RTT us: 25077 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.84 Target kbps: 510 Feedback age ms: 0 Rejected feedback: 21
+Feedback: 21 RTT us: 34904 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.55 Target kbps: 510 Feedback age ms: 0 Rejected feedback: 22
+Feedback: 22 RTT us: 29768 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.49 Target kbps: 510 Feedback age ms: 0 Rejected feedback: 23
+Feedback: 23 RTT us: 24355 Packet loss: 0.00% Frame loss: 0.00% Receive Mbps: 0.55 Target kbps: 574 Feedback age ms: 0 Rejected feedback: 24
+[libx264 @ 0x7d02bede0f80] frame I:240   Avg QP:47.19  size:  4777
+[libx264 @ 0x7d02bede0f80] mb I  I16..4: 100.0%  0.0%  0.0%
+[libx264 @ 0x7d02bede0f80] coded y,uvDC,uvAC intra: 99.6% 35.8% 35.7%
+[libx264 @ 0x7d02bede0f80] i16 v,h,dc,p:  2%  3% 94%  1%
+[libx264 @ 0x7d02bede0f80] i8c dc,h,v,p: 97%  0%  2%  0%
+[libx264 @ 0x7d02bede0f80] kb/s:1146.44
+Encoded: 240 Packets: 1084 Bytes: 1151239 Encode mean us: 1652
+Listening: 54179
+Decoder: h264
+Display: SDL3 CPU surface
+FPS: 27.88 Packets: 266 Observed packet loss: 0.00% Frame loss: 0.00% Dropped: 0 frames Missing: 0 Expired: 0 Superseded: 0 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 2.43 Mbps Validated: 28 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 3234 Presented: 28 Present mean us: 9708 Present max us: 18224 
+FPS: 20.97 Packets: 468 Observed packet loss: 1.89% Frame loss: 15.52% Dropped: 9 frames Missing: 9 Expired: 0 Superseded: 9 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 1.79 Mbps Validated: 49 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2566 Presented: 49 Present mean us: 8788 Present max us: 18224 
+FPS: 19.97 Packets: 592 Observed packet loss: 3.11% Frame loss: 21.59% Dropped: 19 frames Missing: 19 Expired: 0 Superseded: 19 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 1.05 Mbps Validated: 69 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 2215 Presented: 69 Present mean us: 8395 Present max us: 18224 
+FPS: 29.53 Packets: 687 Observed packet loss: 2.83% Frame loss: 16.81% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.86 Mbps Validated: 99 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1917 Presented: 99 Present mean us: 8043 Present max us: 18224 
+FPS: 29.84 Packets: 787 Observed packet loss: 2.48% Frame loss: 13.42% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.90 Mbps Validated: 129 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1763 Presented: 129 Present mean us: 7868 Present max us: 18224 
+FPS: 30.00 Packets: 897 Observed packet loss: 2.18% Frame loss: 11.17% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.97 Mbps Validated: 159 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1672 Presented: 159 Present mean us: 7710 Present max us: 18224 
+FPS: 29.82 Packets: 987 Observed packet loss: 1.99% Frame loss: 9.57% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.73 Mbps Validated: 189 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1600 Presented: 189 Present mean us: 7663 Present max us: 18224 
+FPS: 29.97 Packets: 1063 Observed packet loss: 1.85% Frame loss: 8.37% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.55 Mbps Validated: 219 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1534 Presented: 219 Present mean us: 7668 Present max us: 18224 
+FPS: 1.00 Packets: 1064 Observed packet loss: 1.85% Frame loss: 8.33% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 220 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1531 Presented: 220 Present mean us: 7670 Present max us: 18224 
+FPS: 0.00 Packets: 1064 Observed packet loss: 1.85% Frame loss: 8.33% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 220 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1531 Presented: 220 Present mean us: 7670 Present max us: 18224 
+FPS: 0.00 Packets: 1064 Observed packet loss: 1.85% Frame loss: 8.33% Dropped: 20 frames Missing: 20 Expired: 0 Superseded: 20 Shutdown: 0 Skipped: 0 RTT: N/A Throughput: 0.00 Mbps Validated: 220 Corrupt: 0 Invalid: 0 Duplicates: 0 Stale: 0 Foreign: 0 Decode mean us: 1531 Presented: 220 Present mean us: 7670 Present max us: 18224 
+PASS: dropped media packets=20; dropped feedback=8; feedback replies=31; target range=510..2000 kbps
