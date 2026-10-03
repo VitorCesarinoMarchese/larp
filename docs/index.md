@@ -56,6 +56,7 @@ PipeWire checks were completed with an unlocked desktop.
 
 ## Run and understand the project
 
+- [Read the Obsidian study notes](obsidian/README.md)
 - [[sessions|Set up keys, encrypted streaming, and restart recovery]]
 - [[capture|Capture a Linux screen through PipeWire]]
 - [[software-h264|Encode and decode software H.264]]

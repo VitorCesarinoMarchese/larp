@@ -38,6 +38,8 @@ Linux nodes, and encrypted Tailscale streaming with sender and receiver
 restarts in both directions. See [the acceptance results](docs/session-verification.md).
 
 Each completed milestone has implementation notes and measurements in [`docs/`](docs/).
+The [Obsidian study notes](docs/obsidian/README.md) explain the architecture,
+protocol, recovery, and acceptance evidence in reading order.
 
 ## Build and test
 
